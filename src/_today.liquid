@@ -1,0 +1,65 @@
+{%- comment -%} ===== СЕГОДНЯ (в выходные — понедельник) ===== {%- endcomment -%}
+{%- assign d_idx = show_dow | minus: 1 -%}
+{%- case show_dow -%}
+  {%- when 1 -%}{%- assign arr = mon_arr -%}
+  {%- when 2 -%}{%- assign arr = tue_arr -%}
+  {%- when 3 -%}{%- assign arr = wed_arr -%}
+  {%- when 4 -%}{%- assign arr = thu_arr -%}
+  {%- else -%}{%- assign arr = fri_arr -%}
+{%- endcase -%}
+{%- assign heading = day_long[d_idx] -%}
+{%- if is_weekend == false -%}{%- assign heading = heading | append: " · " | append: today_str -%}{%- endif -%}
+
+{%- comment -%} есть ли уроки {%- endcomment -%}
+{%- assign has_any = false -%}
+{%- for i in (0..last_i) -%}
+  {%- assign raw = arr[i] | default: "" | strip | replace: "-", "" | replace: "—", "" | replace: "–", "" -%}
+  {%- if raw != "" -%}{%- assign has_any = true -%}{%- endif -%}
+{%- endfor -%}
+
+<div class="layout layout--col layout--stretch-x gap--small">
+  <div class="flex flex--row flex--between flex--center-y">
+    <span class="title title--small lg:title--base">{{ heading }}</span>
+    {%- if is_weekend -%}<span class="label label--small label--outline">выходной</span>{%- endif -%}
+  </div>
+  {%- if has_any == false -%}
+    <div class="flex flex--center stretch">
+      <span class="label label--large">Уроков нет</span>
+    </div>
+  {%- else -%}
+  <table class="table {{ tt_size }}" data-table-limit="true">
+    <tbody>
+    {%- for i in (0..last_i) -%}
+      {%- assign lesson_no = i | plus: 1 -%}
+      {%- assign raw = arr[i] | default: "" | strip -%}
+      {%- if raw == "-" or raw == "—" or raw == "–" -%}{%- assign raw = "" -%}{%- endif -%}
+      {%- assign subj = raw | split: "|" | first | default: "" | strip -%}
+      {%- assign room = "" -%}
+      {%- if raw contains "|" -%}{%- assign room = raw | split: "|" | last | strip -%}{%- endif -%}
+      {%- assign t = times_arr[i] | default: "" | strip | replace: "–", "-" | replace: "—", "-" | replace: " ", "" | replace: "-", "–" -%}
+      {%- if tt_skip_empty and subj == "" -%}{%- continue -%}{%- endif -%}
+      <tr{% if i == now_i and is_weekend == false %} class="tt-now"{% endif %}>
+        <td class="w--[28px] lg:w--[44px]"><span class="label label--small">{{ lesson_no }}</span></td>
+        <td><span class="label label--small" style="white-space:nowrap">{{ t }}</span></td>
+        <td>
+          {%- if subj == "" -%}
+            <span class="label label--small tt-empty">—</span>
+          {%- else -%}
+            <span class="label {{ tt_subj_size }}" data-clamp="1">{{ subj }}</span>
+          {%- endif -%}
+        </td>
+        {%- if tt_show_room -%}
+        <td><span class="label label--small tt-room" data-clamp="1">{{ room }}</span></td>
+        {%- endif -%}
+      </tr>
+    {%- endfor -%}
+    </tbody>
+  </table>
+  {%- endif -%}
+</div>
+
+<div class="title_bar">
+  <img class="image" src="https://usetrmnl.com/images/plugins/trmnl--render.svg" />
+  <span class="title">Расписание</span>
+  <span class="instance">{{ class_name }}{% if school_year != "" %} · {{ school_year }}{% endif %}</span>
+</div>
