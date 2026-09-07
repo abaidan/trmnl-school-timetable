@@ -1,0 +1,137 @@
+---
+strategy: static
+no_screen_padding: 'no'
+dark_mode: 'no'
+static_data: '{"ok": true}'
+polling_verb: get
+framework_version: 3.3.1
+serverless_language: ''
+polling_url: ''
+polling_headers: ''
+polling_body: ''
+id: 470872
+oauth_enabled: 'false'
+oauth_pkce_enabled: 'no'
+oauth_authorize_url: ''
+oauth_token_url: ''
+oauth_scopes: ''
+oauth_scope_separator: ''
+oauth_refresh_url: ''
+oauth_auth_params: ''
+oauth_token_headers: ''
+oauth_token_site: ''
+oauth_token_params: ''
+oauth_token_request_auth_method: ''
+oauth_body_format: ''
+oauth_token_response_metadata: ''
+oauth_authorization_method: ''
+oauth_refresh_params: ''
+oauth_token_field_name: ''
+oauth_expiry_field_name: ''
+oauth_expiry_strategy: ''
+oauth_fixed_expiry_ms: ''
+custom_fields:
+- keyname: about
+  name: О плагине
+  field_type: author_bio
+  category: education,personal
+  description: Расписание уроков на неделю. Всё вводится вручную — без API и аккаунтов. Одна строка = один урок. Полный экран показывает всю неделю с подсветкой сегодняшнего дня и текущего урока; половинные и четвертные виды — сегодня (в выходные — понедельник). Оптимизировано под TRMNL X и TRMNL OG.
+- keyname: class_name
+  name: Класс
+  field_type: string
+  description: Например 5.A или 7б. Показывается в заголовке.
+  placeholder: 5.A
+  maxlength: 20
+- keyname: school_year
+  name: Учебный год
+  field_type: string
+  optional: true
+  description: Например 2026/27.
+  placeholder: 2026/27
+  maxlength: 12
+- keyname: lesson_times
+  name: Время уроков
+  field_type: text
+  rows: 8
+  group: Время
+  description: Одна строка = один урок, по порядку. Формат 8:00-8:45.
+  help_text: Максимум 8 уроков. Нужно для подсветки текущего урока.
+  default: |
+    8:00-8:45
+    8:55-9:40
+    10:00-10:45
+    10:55-11:40
+    11:50-12:35
+    12:45-13:30
+    13:40-14:25
+    14:35-15:20
+  placeholder: |
+    8:00-8:45
+    8:55-9:40
+    10:00-10:45
+- keyname: breaks
+  name: Перемены
+  field_type: text
+  rows: 3
+  optional: true
+  group: Время
+  description: 'После какого урока и название, по одной на строку. Формат «2: Большая перемена».'
+  help_text: Показываются отдельной строкой между уроками. Оставьте пустым, если не нужно.
+  placeholder: |
+    2: Большая перемена
+    5: Обед
+- keyname: mon
+  name: Понедельник
+  field_type: text
+  rows: 8
+  group: Уроки
+  description: Одна строка = один урок (1-й урок — первая строка). Пустая строка или «-» — нет урока.
+  placeholder: |
+    Математика
+    Чешский
+    Английский
+    -
+    Физкультура
+- keyname: tue
+  name: Вторник
+  field_type: text
+  rows: 8
+  group: Уроки
+  description: Одна строка = один урок. Пустая строка или «-» — нет урока.
+  optional: true
+- keyname: wed
+  name: Среда
+  field_type: text
+  rows: 8
+  group: Уроки
+  description: Одна строка = один урок. Пустая строка или «-» — нет урока.
+  optional: true
+- keyname: thu
+  name: Четверг
+  field_type: text
+  rows: 8
+  group: Уроки
+  description: Одна строка = один урок. Пустая строка или «-» — нет урока.
+  optional: true
+- keyname: fri
+  name: Пятница
+  field_type: text
+  rows: 8
+  group: Уроки
+  description: Одна строка = один урок. Пустая строка или «-» — нет урока.
+  optional: true
+- keyname: highlight_today
+  name: Подсвечивать сегодня
+  field_type: boolean
+  default: true
+  group: Вид
+  description: Выделять колонку сегодняшнего дня и текущий урок.
+- keyname: show_room
+  name: Показывать кабинет
+  field_type: boolean
+  default: true
+  group: Вид
+  description: Если в строке урока есть «|», текст после него — кабинет или учитель. Например «Математика | 204».
+name: Расписание уроков
+description: ''
+refresh_interval: 60
