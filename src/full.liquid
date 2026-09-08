@@ -138,11 +138,9 @@
   .tt-today-row { box-shadow: inset 0 2px 0 #000, inset 0 -2px 0 #000; }
   .tt-today .label, .tt-today .title,
   .tt-today-row .label, .tt-today-row .title { font-weight: 700; }
-  .tt-now-time { font-weight: 700; }
   /* the activities block is divided off along whichever edge faces the lessons */
   .tt-act-sep { border-top: 2px solid #000; }
   .tt-act-row td { border-top: 2px solid #000; }
-  .tt-act-col { border-left: 2px solid #000; }
 </style>
 
 {%- comment -%} ===== FULL: the whole week ===== {%- endcomment -%}
@@ -192,7 +190,7 @@
           <th class="text--center py--1 px--1">
             {%- if i == now_i -%}
               <span class="label label--inverted lg:label--large block">{{ lesson_no }}</span>
-              <span class="label label--small tt-now-time tt-nw block">{{ t }}</span>
+              <span class="label label--small text--bold tt-nw block">{{ t }}</span>
             {%- else -%}
               <span class="title title--small lg:title--base block">{{ lesson_no }}</span>
               <span class="label label--small text--gray-30 tt-nw block">{{ t }}</span>
@@ -200,7 +198,7 @@
           </th>
         {%- endfor -%}
         {%- if has_acts -%}
-          <th class="tt-act-col text--center py--1 px--1">
+          <th class="border--v-black text--center py--1 px--1">
             <span class="title title--small lg:title--base block">After school</span>
             <span class="label label--small text--gray-30 block">&nbsp;</span>
           </th>
@@ -261,7 +259,7 @@
           </td>
         {%- endfor -%}
         {%- if has_acts -%}
-          <td class="tt-act-col text--center py--1 px--1">
+          <td class="border--v-black text--center py--1 px--1">
             {%- assign ents = acts | split: "~" -%}
             {%- if ents.size == 0 -%}
               <span class="label label--small text--gray-55 block">—</span>
@@ -313,7 +311,7 @@
       <tr>
         {%- if i == now_i -%}
           <td class="text--center py--1 px--1"><span class="label label--inverted lg:label--large block">{{ lesson_no }}</span></td>
-          <td class="text--center py--1 px--1"><span class="label label--small lg:label--base tt-now-time tt-nw block">{{ t }}</span></td>
+          <td class="text--center py--1 px--1"><span class="label label--small lg:label--base text--bold tt-nw block">{{ t }}</span></td>
         {%- else -%}
           <td class="text--center py--1 px--1"><span class="label label--small lg:label--base block">{{ lesson_no }}</span></td>
           <td class="text--center py--1 px--1"><span class="label label--small lg:label--base tt-nw block">{{ t }}</span></td>
@@ -414,7 +412,7 @@
 </div>
 
 <div class="title_bar">
-  <img class="image" src="{{ tt_icon }}" />
+  <img class="image image-dither" src="{{ tt_icon }}" />
   <span class="title">Timetable</span>
   <span class="instance">{{ class_name }}{% if school_year != "" %} · {{ school_year }}{% endif %}</span>
 </div>
