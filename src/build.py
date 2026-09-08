@@ -67,3 +67,12 @@ with zipfile.ZipFile(zpath, "w", zipfile.ZIP_DEFLATED) as z:
     for n, t in views.items():
         z.writestr(n, t)
 print("->", zpath.name)
+
+# The TRMNL sync bot keeps the generated views in src/ too, so write them back
+# and keep the repo matching what TRMNL has. full.liquid is skipped on purpose:
+# in src/ that path is the hand-written source, not the prep-inlined build output.
+for n, t in views.items():
+    if n == "full.liquid":
+        continue
+    (SRC / n).write_text(t)
+    print("   synced", n)

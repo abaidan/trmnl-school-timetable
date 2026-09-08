@@ -1,0 +1,247 @@
+{%- comment -%} ===== School timetable: shared data prep ===== {%- endcomment -%}
+{%- capture nl %}
+{% endcapture -%}
+{%- assign cf = trmnl.plugin_settings.custom_fields_values -%}
+{%- assign class_name = cf.class_name | default: "" | strip -%}
+{%- assign school_year = cf.school_year | default: "" | strip -%}
+
+{%- assign hl = true -%}
+{%- if cf.highlight_today == false or cf.highlight_today == "false" -%}{%- assign hl = false -%}{%- endif -%}
+{%- assign show_room = true -%}
+{%- if cf.show_room == false or cf.show_room == "false" -%}{%- assign show_room = false -%}{%- endif -%}
+
+{%- comment -%} grid orientation: days across the top (default), or days down the side and time across the top {%- endcomment -%}
+{%- assign orient = cf.orientation | default: "" | downcase -%}
+{%- assign days_as_rows = false -%}
+{%- if orient contains "row" -%}{%- assign days_as_rows = true -%}{%- endif -%}
+
+{%- assign times_arr = cf.lesson_times | default: "" | split: nl -%}
+{%- assign breaks_arr = cf.breaks | default: "" | split: nl -%}
+{%- assign mon_arr = cf.mon | default: "" | split: nl -%}
+{%- assign tue_arr = cf.tue | default: "" | split: nl -%}
+{%- assign wed_arr = cf.wed | default: "" | split: nl -%}
+{%- assign thu_arr = cf.thu | default: "" | split: nl -%}
+{%- assign fri_arr = cf.fri | default: "" | split: nl -%}
+
+{%- comment -%} user's local time {%- endcomment -%}
+{%- assign now_utc = trmnl.system.timestamp_utc | default: "now" | date: "%s" | plus: 0 -%}
+{%- assign offset = trmnl.user.utc_offset | default: 0 | plus: 0 -%}
+{%- assign now_local = now_utc | plus: offset -%}
+{%- assign dow = now_local | date: "%u" | plus: 0 -%}
+{%- assign now_h = now_local | date: "%H" | plus: 0 -%}
+{%- assign now_m = now_local | date: "%M" | plus: 0 -%}
+{%- assign now_min = now_h | times: 60 | plus: now_m -%}
+{%- assign today_str = now_local | date: "%d.%m" -%}
+
+{%- assign is_weekend = false -%}
+{%- if dow > 5 -%}{%- assign is_weekend = true -%}{%- endif -%}
+{%- assign show_dow = dow -%}
+{%- if is_weekend -%}{%- assign show_dow = 1 -%}{%- endif -%}
+{%- assign next_dow = dow | plus: 1 -%}
+{%- if next_dow > 5 -%}{%- assign next_dow = 1 -%}{%- endif -%}
+
+{%- assign day_keys = "mon,tue,wed,thu,fri" | split: "," -%}
+{%- assign day_short = "Mon,Tue,Wed,Thu,Fri" | split: "," -%}
+{%- assign day_long = "Monday,Tuesday,Wednesday,Thursday,Friday" | split: "," -%}
+
+{%- comment -%}
+  after-school activities: one per line, "Mon | 15:00-16:30 | Football".
+  Stored per day as "time|name~time|name" ("~" separates entries).
+{%- endcomment -%}
+{%- assign acts_arr = cf.activities | default: "" | split: nl -%}
+{%- assign mon_acts = "" -%}
+{%- assign tue_acts = "" -%}
+{%- assign wed_acts = "" -%}
+{%- assign thu_acts = "" -%}
+{%- assign fri_acts = "" -%}
+{%- assign has_acts = false -%}
+{%- for a in acts_arr -%}
+  {%- assign line = a | strip -%}
+  {%- if line == "" -%}{%- continue -%}{%- endif -%}
+  {%- assign parts = line | split: "|" -%}
+  {%- assign a_day = parts[0] | default: "" | strip | downcase | slice: 0, 3 -%}
+  {%- assign a_time = "" -%}
+  {%- assign a_name = "" -%}
+  {%- if parts.size > 2 -%}
+    {%- assign a_time = parts[1] | strip | replace: "–", "-" | replace: "—", "-" | replace: " ", "" | replace: "-", "–" -%}
+    {%- assign a_name = parts[2] | strip -%}
+  {%- elsif parts.size == 2 -%}
+    {%- assign a_name = parts[1] | strip -%}
+  {%- endif -%}
+  {%- if a_name == "" -%}{%- continue -%}{%- endif -%}
+  {%- assign entry = a_time | append: "|" | append: a_name -%}
+  {%- case a_day -%}
+    {%- when "mon" -%}
+      {%- if mon_acts != "" -%}{%- assign mon_acts = mon_acts | append: "~" -%}{%- endif -%}
+      {%- assign mon_acts = mon_acts | append: entry -%}
+    {%- when "tue" -%}
+      {%- if tue_acts != "" -%}{%- assign tue_acts = tue_acts | append: "~" -%}{%- endif -%}
+      {%- assign tue_acts = tue_acts | append: entry -%}
+    {%- when "wed" -%}
+      {%- if wed_acts != "" -%}{%- assign wed_acts = wed_acts | append: "~" -%}{%- endif -%}
+      {%- assign wed_acts = wed_acts | append: entry -%}
+    {%- when "thu" -%}
+      {%- if thu_acts != "" -%}{%- assign thu_acts = thu_acts | append: "~" -%}{%- endif -%}
+      {%- assign thu_acts = thu_acts | append: entry -%}
+    {%- when "fri" -%}
+      {%- if fri_acts != "" -%}{%- assign fri_acts = fri_acts | append: "~" -%}{%- endif -%}
+      {%- assign fri_acts = fri_acts | append: entry -%}
+    {%- else -%}
+      {%- continue -%}
+  {%- endcase -%}
+  {%- assign has_acts = true -%}
+{%- endfor -%}
+
+{%- comment -%} how many lesson rows are actually filled in (max 8) {%- endcomment -%}
+{%- assign n_rows = 0 -%}
+{%- for i in (0..7) -%}
+  {%- assign any = "" -%}
+  {%- assign any = any | append: mon_arr[i] | append: tue_arr[i] | append: wed_arr[i] | append: thu_arr[i] | append: fri_arr[i] -%}
+  {%- assign any = any | replace: "-", "" | strip -%}
+  {%- if any != "" -%}{%- assign n_rows = i | plus: 1 -%}{%- endif -%}
+{%- endfor -%}
+{%- if n_rows == 0 -%}{%- assign n_rows = times_arr.size -%}{%- endif -%}
+{%- if n_rows > 8 -%}{%- assign n_rows = 8 -%}{%- endif -%}
+{%- assign last_i = n_rows | minus: 1 -%}
+
+{%- comment -%} index of the lesson happening right now (0-based), or -1 {%- endcomment -%}
+{%- assign now_i = -1 -%}
+{%- if hl and is_weekend == false -%}
+  {%- for i in (0..last_i) -%}
+    {%- assign t = times_arr[i] | default: "" | strip | replace: "–", "-" | replace: "—", "-" | replace: " ", "" -%}
+    {%- assign t_start = t | split: "-" | first | default: "" -%}
+    {%- assign t_end = t | split: "-" | last | default: "" -%}
+    {%- if t_start contains ":" and t_end contains ":" -%}
+      {%- assign hh = t_start | split: ":" | first | plus: 0 -%}
+      {%- assign mm = t_start | split: ":" | last | plus: 0 -%}
+      {%- assign s_min = hh | times: 60 | plus: mm -%}
+      {%- assign hh = t_end | split: ":" | first | plus: 0 -%}
+      {%- assign mm = t_end | split: ":" | last | plus: 0 -%}
+      {%- assign e_min = hh | times: 60 | plus: mm -%}
+      {%- if now_min >= s_min and now_min < e_min -%}{%- assign now_i = i -%}{%- endif -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+<style>
+  /* equal-sized cells: fixed layout + explicit column widths, centred content */
+  .tt-grid { table-layout: fixed; width: 100%; }
+  .tt-grid th, .tt-grid td {
+    text-align: center !important;
+    vertical-align: middle !important;
+    padding: 5px 6px !important;
+    overflow: hidden;
+  }
+  .tt-grid th > span, .tt-grid td > span { display: block; text-align: center; }
+  .tt-today .label, .tt-today .title { font-weight: 700; }
+  .tt-today { box-shadow: inset 2px 0 0 #000, inset -2px 0 0 #000; }
+  .tt-today-row { box-shadow: inset 0 2px 0 #000, inset 0 -2px 0 #000; }
+  .tt-today-row .label, .tt-today-row .title { font-weight: 700; }
+  .tt-now { background: #000; }
+  .tt-now .label, .tt-now .title { color: #fff; }
+  .tt-now .tt-room, .tt-now .tt-act-time { color: #fff; opacity: .8; }
+  .tt-break td { padding-top: 0 !important; padding-bottom: 0 !important; }
+  .tt-break .label { opacity: .7; }
+  .tt-room { opacity: .65; }
+  /* on small screens (OG) the room line in the week grid does not fit */
+  .screen:not(.screen--lg) .tt-week .tt-room { display: none !important; }
+  .tt-empty { opacity: .35; }
+  .tt-act-time { opacity: .65; }
+  .tt-act-sep { border-top: 2px solid #000; }
+</style>
+
+{%- assign tt_size = "table--small lg:table--base" -%}
+{%- assign tt_subj_size = "lg:label--large" -%}
+{%- assign tt_show_room = show_room -%}
+{%- comment -%} ===== TODAY (Monday on weekends) ===== {%- endcomment -%}
+{%- assign d_idx = show_dow | minus: 1 -%}
+{%- case show_dow -%}
+  {%- when 1 -%}{%- assign arr = mon_arr -%}{%- assign acts = mon_acts -%}
+  {%- when 2 -%}{%- assign arr = tue_arr -%}{%- assign acts = tue_acts -%}
+  {%- when 3 -%}{%- assign arr = wed_arr -%}{%- assign acts = wed_acts -%}
+  {%- when 4 -%}{%- assign arr = thu_arr -%}{%- assign acts = thu_acts -%}
+  {%- else -%}{%- assign arr = fri_arr -%}{%- assign acts = fri_acts -%}
+{%- endcase -%}
+{%- assign heading = day_long[d_idx] -%}
+{%- if is_weekend == false -%}{%- assign heading = heading | append: " · " | append: today_str -%}{%- endif -%}
+
+{%- comment -%} are there any lessons at all {%- endcomment -%}
+{%- assign has_any = false -%}
+{%- for i in (0..last_i) -%}
+  {%- assign raw = arr[i] | default: "" | strip | replace: "-", "" | replace: "—", "" | replace: "–", "" -%}
+  {%- if raw != "" -%}{%- assign has_any = true -%}{%- endif -%}
+{%- endfor -%}
+
+{%- comment -%} column widths: keep every cell the same size {%- endcomment -%}
+{%- assign w_no = "12%" -%}
+{%- assign w_time = "26%" -%}
+{%- assign w_subj = "36%" -%}
+{%- if tt_show_room == false -%}
+  {%- assign w_time = "30%" -%}
+  {%- assign w_subj = "58%" -%}
+{%- endif -%}
+
+<div class="layout layout--col layout--stretch-x gap--small">
+  <div class="flex flex--row flex--between flex--center-y">
+    <span class="title title--small lg:title--base">{{ heading }}</span>
+    {%- if is_weekend -%}<span class="label label--small label--outline">day off</span>{%- endif -%}
+  </div>
+  {%- if has_any == false -%}
+    <div class="flex flex--center stretch">
+      <span class="label label--large">No lessons</span>
+    </div>
+  {%- else -%}
+  <table class="table {{ tt_size }} tt-grid" data-table-limit="true">
+    <tbody>
+    {%- for i in (0..last_i) -%}
+      {%- assign lesson_no = i | plus: 1 -%}
+      {%- assign raw = arr[i] | default: "" | strip -%}
+      {%- if raw == "-" or raw == "—" or raw == "–" -%}{%- assign raw = "" -%}{%- endif -%}
+      {%- assign subj = raw | split: "|" | first | default: "" | strip -%}
+      {%- assign room = "" -%}
+      {%- if raw contains "|" -%}{%- assign room = raw | split: "|" | last | strip -%}{%- endif -%}
+      {%- assign t = times_arr[i] | default: "" | strip | replace: "–", "-" | replace: "—", "-" | replace: " ", "" | replace: "-", "–" -%}
+      {%- if tt_skip_empty and subj == "" -%}{%- continue -%}{%- endif -%}
+      <tr{% if i == now_i and is_weekend == false %} class="tt-now"{% endif %}>
+        <td style="width:{{ w_no }}"><span class="label label--small">{{ lesson_no }}</span></td>
+        <td style="width:{{ w_time }}"><span class="label label--small" style="white-space:nowrap">{{ t }}</span></td>
+        <td style="width:{{ w_subj }}">
+          {%- if subj == "" -%}
+            <span class="label label--small tt-empty">—</span>
+          {%- else -%}
+            <span class="label {{ tt_subj_size }}" data-clamp="1">{{ subj }}</span>
+          {%- endif -%}
+        </td>
+        {%- if tt_show_room -%}
+        <td style="width:26%"><span class="label label--small tt-room" data-clamp="1">{{ room }}</span></td>
+        {%- endif -%}
+      </tr>
+    {%- endfor -%}
+    </tbody>
+  </table>
+  {%- endif -%}
+
+  {%- if acts != "" -%}
+    <span class="title title--small tt-act-sep" style="display:block;padding-top:4px">After school</span>
+    <table class="table {{ tt_size }} tt-grid" data-table-limit="true">
+      <tbody>
+        {%- assign ents = acts | split: "~" -%}
+        {%- for e in ents -%}
+          {%- assign ep = e | split: "|" -%}
+          {%- assign e_time = ep[0] | default: "" | strip -%}
+          {%- assign e_name = ep[1] | default: "" | strip -%}
+          {%- if e_name == "" -%}{%- assign e_name = e_time -%}{%- assign e_time = "" -%}{%- endif -%}
+          <tr>
+            <td style="width:38%"><span class="label label--small" style="white-space:nowrap">{{ e_time }}</span></td>
+            <td><span class="label {{ tt_subj_size }}" data-clamp="1">{{ e_name }}</span></td>
+          </tr>
+        {%- endfor -%}
+      </tbody>
+    </table>
+  {%- endif -%}
+</div>
+
+<div class="title_bar">
+  <img class="image" src="https://usetrmnl.com/images/plugins/trmnl--render.svg" />
+  <span class="title">Timetable</span>
+  <span class="instance">{{ class_name }}{% if school_year != "" %} · {{ school_year }}{% endif %}</span>
+</div>
