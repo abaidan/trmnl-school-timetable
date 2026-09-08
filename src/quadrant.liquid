@@ -149,7 +149,12 @@
   .screen:not(.screen--lg) .tt-week .tt-room { display: none !important; }
   .tt-empty { opacity: .35; }
   .tt-act-time { opacity: .65; }
+  /* the activities block is divided off along whichever edge faces the lessons:
+     a rule under the row, down the side of the column, above the today-view list */
   .tt-act-sep { border-top: 2px solid #000; }
+  .tt-act-row td { border-top: 2px solid #000; }
+  .tt-act-col { border-left: 2px solid #000; }
+  .tt-now-time { font-weight: 700; }
 </style>
 
 {%- assign tt_size = "table--xsmall lg:table--small" -%}

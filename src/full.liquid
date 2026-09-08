@@ -149,7 +149,12 @@
   .screen:not(.screen--lg) .tt-week .tt-room { display: none !important; }
   .tt-empty { opacity: .35; }
   .tt-act-time { opacity: .65; }
+  /* the activities block is divided off along whichever edge faces the lessons:
+     a rule under the row, down the side of the column, above the today-view list */
   .tt-act-sep { border-top: 2px solid #000; }
+  .tt-act-row td { border-top: 2px solid #000; }
+  .tt-act-col { border-left: 2px solid #000; }
+  .tt-now-time { font-weight: 700; }
 </style>
 
 {%- comment -%} ===== FULL: the whole week ===== {%- endcomment -%}
@@ -187,12 +192,17 @@
           {%- assign lesson_no = forloop.index -%}
           {%- assign t = times_arr[i] | default: "" | strip | replace: "–", "-" | replace: "—", "-" | replace: " ", "" | replace: "-", "–" -%}
           <th style="width:{{ colw }}%">
-            <span class="title title--small lg:title--base">{{ lesson_no }}</span>
-            <span class="label label--small tt-room" style="white-space:nowrap">{{ t }}</span>
+            {%- if i == now_i -%}
+              <span class="label label--inverted lg:label--large">{{ lesson_no }}</span>
+              <span class="label label--small tt-now-time" style="white-space:nowrap">{{ t }}</span>
+            {%- else -%}
+              <span class="title title--small lg:title--base">{{ lesson_no }}</span>
+              <span class="label label--small tt-room" style="white-space:nowrap">{{ t }}</span>
+            {%- endif -%}
           </th>
         {%- endfor -%}
         {%- if has_acts -%}
-          <th class="tt-act-sep" style="width:{{ colw }}%">
+          <th class="tt-act-col" style="width:{{ colw }}%">
             <span class="title title--small lg:title--base">After school</span>
             <span class="label label--small tt-room">&nbsp;</span>
           </th>
@@ -245,7 +255,7 @@
           </td>
         {%- endfor -%}
         {%- if has_acts -%}
-          <td class="tt-act-sep">
+          <td class="tt-act-col">
             {%- assign ents = acts | split: "~" -%}
             {%- if ents.size == 0 -%}
               <span class="label label--small tt-empty">—</span>
@@ -295,8 +305,13 @@
       {%- assign lesson_no = i | plus: 1 -%}
       {%- assign t = times_arr[i] | default: "" | strip | replace: "–", "-" | replace: "—", "-" | replace: " ", "" | replace: "-", "–" -%}
       <tr>
-        <td><span class="label label--small lg:label--base">{{ lesson_no }}</span></td>
-        <td><span class="label label--small lg:label--base" style="white-space:nowrap">{{ t }}</span></td>
+        {%- if i == now_i -%}
+          <td><span class="label label--inverted lg:label--large">{{ lesson_no }}</span></td>
+          <td><span class="label label--small lg:label--base tt-now-time" style="white-space:nowrap">{{ t }}</span></td>
+        {%- else -%}
+          <td><span class="label label--small lg:label--base">{{ lesson_no }}</span></td>
+          <td><span class="label label--small lg:label--base" style="white-space:nowrap">{{ t }}</span></td>
+        {%- endif -%}
         {%- for dk in day_keys -%}
           {%- assign d_no = forloop.index -%}
           {%- case dk -%}
@@ -345,7 +360,7 @@
       {%- endfor -%}
     {%- endfor -%}
     {%- if has_acts -%}
-      <tr class="tt-act-sep">
+      <tr class="tt-act-row">
         <td colspan="2"><span class="label label--small lg:label--base">After school</span></td>
         {%- for dk in day_keys -%}
           {%- assign d_no = forloop.index -%}
