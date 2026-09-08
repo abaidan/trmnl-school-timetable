@@ -73,11 +73,13 @@
       {%- endcase -%}
       {%- assign is_today = false -%}
       {%- if hl and is_weekend == false and d_no == dow -%}{%- assign is_today = true -%}{%- endif -%}
+      {%- assign bold = "" -%}
+      {%- if is_today -%}{%- assign bold = " text--bold" -%}{%- endif -%}
       <tr{% if is_today %} class="tt-today-row"{% endif %}>
         <td class="text--center py--1 px--1">
           {%- if is_today -%}
-            <span class="label label--inverted lg:label--large block">{{ day_short[d_i] }}</span>
-            <span class="label label--small text--gray-30 block">{{ today_str }}</span>
+            <span class="label label--inverted lg:label--large block{{ bold }}">{{ day_short[d_i] }}</span>
+            <span class="label label--small text--gray-30 block{{ bold }}">{{ today_str }}</span>
           {%- else -%}
             <span class="title title--small lg:title--base block">{{ day_short[d_i] }}</span>
             <span class="label label--small text--gray-30 block">&nbsp;</span>
@@ -90,9 +92,9 @@
           {%- assign room = "" -%}
           {%- if raw contains "|" -%}{%- assign room = raw | split: "|" | last | strip -%}{%- endif -%}
           {%- assign cls = "text--center py--1 px--1" -%}
-          {%- assign ink = "text--gray-30" -%}
-          {%- assign ink_main = "" -%}
-          {%- assign ink_dim = "text--gray-55" -%}
+          {%- assign ink = "text--gray-30" | append: bold -%}
+          {%- assign ink_main = bold -%}
+          {%- assign ink_dim = "text--gray-55" | append: bold -%}
           {%- if is_today and i == now_i -%}
             {%- assign cls = cls | append: " tt-now bg--black" -%}
             {%- assign ink = "text--white" -%}
@@ -125,9 +127,9 @@
               {%- assign e_name = ep[1] | default: "" | strip -%}
               {%- if e_name == "" -%}{%- assign e_name = e_time -%}{%- assign e_time = "" -%}{%- endif -%}
               {%- assign e_n = e_name | split: "//" | size -%}
-              <span class="label label--small lg:label--base block" data-clamp="{{ e_n }}">{{ e_name | replace: " //", "//" | replace: "// ", "//" | replace: "//", "<br>" }}</span>
+              <span class="label label--small lg:label--base block{{ bold }}" data-clamp="{{ e_n }}">{{ e_name | replace: " //", "//" | replace: "// ", "//" | replace: "//", "<br>" }}</span>
               {%- if e_time != "" -%}
-                <span class="label label--small text--gray-30 tt-nw block">{{ e_time }}</span>
+                <span class="label label--small text--gray-30 tt-nw block{{ bold }}">{{ e_time }}</span>
               {%- endif -%}
             {%- endfor -%}
           </td>
@@ -149,9 +151,11 @@
           {%- assign d_no = forloop.index -%}
           {%- assign is_today = false -%}
           {%- if hl and is_weekend == false and d_no == dow -%}{%- assign is_today = true -%}{%- endif -%}
+          {%- assign bold = "" -%}
+          {%- if is_today -%}{%- assign bold = " text--bold" -%}{%- endif -%}
           <th class="text--center py--1 px--1{% if is_today %} tt-today{% endif %}">
             {%- if is_today -%}
-              <span class="label label--inverted lg:label--large block">{{ day_short[forloop.index0] }} · {{ today_str }}</span>
+              <span class="label label--inverted lg:label--large block{{ bold }}">{{ day_short[forloop.index0] }} · {{ today_str }}</span>
             {%- else -%}
               <span class="title title--small lg:title--base block">{{ day_short[forloop.index0] }}</span>
             {%- endif -%}
@@ -191,6 +195,9 @@
           {%- assign ink_dim = "text--gray-55" -%}
           {%- if hl and is_weekend == false and d_no == dow -%}
             {%- assign cls = cls | append: " tt-today" -%}
+            {%- assign ink = ink | append: " text--bold" -%}
+            {%- assign ink_main = ink_main | append: " text--bold" -%}
+            {%- assign ink_dim = ink_dim | append: " text--bold" -%}
             {%- if i == now_i -%}
               {%- assign cls = cls | append: " tt-now bg--black" -%}
               {%- assign ink = "text--white" -%}
@@ -239,7 +246,11 @@
             {%- else -%}{%- assign acts = fri_acts -%}
           {%- endcase -%}
           {%- assign cls = "text--center py--1 px--1" -%}
-          {%- if hl and is_weekend == false and d_no == dow -%}{%- assign cls = cls | append: " tt-today" -%}{%- endif -%}
+          {%- assign bold = "" -%}
+          {%- if hl and is_weekend == false and d_no == dow -%}
+            {%- assign cls = cls | append: " tt-today" -%}
+            {%- assign bold = " text--bold" -%}
+          {%- endif -%}
           <td class="{{ cls }}">
             {%- assign ents = acts | split: "~" -%}
             {%- if ents.size == 0 -%}
@@ -251,9 +262,9 @@
               {%- assign e_name = ep[1] | default: "" | strip -%}
               {%- if e_name == "" -%}{%- assign e_name = e_time -%}{%- assign e_time = "" -%}{%- endif -%}
               {%- assign e_n = e_name | split: "//" | size -%}
-              <span class="label label--small lg:label--base block" data-clamp="{{ e_n }}">{{ e_name | replace: " //", "//" | replace: "// ", "//" | replace: "//", "<br>" }}</span>
+              <span class="label label--small lg:label--base block{{ bold }}" data-clamp="{{ e_n }}">{{ e_name | replace: " //", "//" | replace: "// ", "//" | replace: "//", "<br>" }}</span>
               {%- if e_time != "" -%}
-                <span class="label label--small text--gray-30 tt-nw block">{{ e_time }}</span>
+                <span class="label label--small text--gray-30 tt-nw block{{ bold }}">{{ e_time }}</span>
               {%- endif -%}
             {%- endfor -%}
           </td>
