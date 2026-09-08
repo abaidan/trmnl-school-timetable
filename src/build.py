@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Собирает ZIP приватного плагина TRMNL из src/."""
+"""Builds the TRMNL private-plugin ZIP from src/."""
 import re, sys, zipfile, pathlib, yaml
 
 SRC = pathlib.Path(__file__).parent
@@ -26,7 +26,7 @@ views = {
         + '\n{%- assign tt_skip_empty = true -%}\n' + today,
 }
 
-# --- проверки ---
+# --- checks ---
 settings_text = (SRC / "settings.yml").read_text()
 settings = yaml.safe_load(settings_text)
 assert settings["strategy"] == "static"
@@ -50,7 +50,7 @@ def check(name, text):
         elif tag in ("when", "else", "elsif", "continue", "break"):
             if not stack: sys.exit(f"{name}: {tag} outside block")
     if stack: sys.exit(f"{name}: unclosed {stack}")
-    # переменные, которые используются, но не объявлены в prep
+    # variables that are used but never assigned in prep
     used = set(re.findall(r"{{-?\s*([a-z_]+)", text))
     assigned = set(re.findall(r"assign\s+([a-z_]+)", text)) | {"forloop"}
     loopvars = set(re.findall(r"for\s+([a-z_]+)\s+in", text))
@@ -61,7 +61,7 @@ def check(name, text):
 for n, t in views.items():
     check(n, t)
 
-zpath = OUT / "trmnl-raspisanie-urokov.zip"
+zpath = OUT / "trmnl-school-timetable.zip"
 with zipfile.ZipFile(zpath, "w", zipfile.ZIP_DEFLATED) as z:
     z.writestr("settings.yml", settings_text)
     for n, t in views.items():

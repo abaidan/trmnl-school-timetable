@@ -1,15 +1,109 @@
-{%- comment -%} ===== FULL: вся неделя ===== {%- endcomment -%}
+{%- comment -%} ===== FULL: the whole week ===== {%- endcomment -%}
 <div class="layout layout--col layout--stretch-x gap--small">
-  <table class="table table--base lg:table--large tt-week" data-table-limit="true">
+{%- if days_as_rows -%}
+
+  {%- comment -%} --- time across the top, days down the side --- {%- endcomment -%}
+  {%- assign n_cols = n_rows -%}
+  {%- if has_acts -%}{%- assign n_cols = n_cols | plus: 1 -%}{%- endif -%}
+  {%- assign colw = 87 | divided_by: n_cols -%}
+  <table class="table table--base lg:table--large tt-grid tt-week" data-table-limit="true">
     <thead>
       <tr>
-        <th class="w--[36px] lg:w--[56px]"><span class="title title--small lg:title--base">#</span></th>
-        <th><span class="title title--small lg:title--base">Время</span></th>
+        <th style="width:13%"><span class="title title--small lg:title--base">Day</span></th>
+        {%- for i in (0..last_i) -%}
+          {%- assign lesson_no = forloop.index -%}
+          {%- assign t = times_arr[i] | default: "" | strip | replace: "–", "-" | replace: "—", "-" | replace: " ", "" | replace: "-", "–" -%}
+          <th style="width:{{ colw }}%">
+            <span class="title title--small lg:title--base">{{ lesson_no }}</span>
+            <span class="label label--small tt-room" style="white-space:nowrap">{{ t }}</span>
+          </th>
+        {%- endfor -%}
+        {%- if has_acts -%}
+          <th class="tt-act-sep" style="width:{{ colw }}%">
+            <span class="title title--small lg:title--base">After school</span>
+            <span class="label label--small tt-room">&nbsp;</span>
+          </th>
+        {%- endif -%}
+      </tr>
+    </thead>
+    <tbody>
+    {%- for dk in day_keys -%}
+      {%- assign d_no = forloop.index -%}
+      {%- assign d_i = forloop.index0 -%}
+      {%- case dk -%}
+        {%- when "mon" -%}{%- assign arr = mon_arr -%}{%- assign acts = mon_acts -%}
+        {%- when "tue" -%}{%- assign arr = tue_arr -%}{%- assign acts = tue_acts -%}
+        {%- when "wed" -%}{%- assign arr = wed_arr -%}{%- assign acts = wed_acts -%}
+        {%- when "thu" -%}{%- assign arr = thu_arr -%}{%- assign acts = thu_acts -%}
+        {%- else -%}{%- assign arr = fri_arr -%}{%- assign acts = fri_acts -%}
+      {%- endcase -%}
+      {%- assign is_today = false -%}
+      {%- if hl and is_weekend == false and d_no == dow -%}{%- assign is_today = true -%}{%- endif -%}
+      <tr{% if is_today %} class="tt-today-row"{% endif %}>
+        <td>
+          {%- if is_today -%}
+            <span class="label label--inverted lg:label--large">{{ day_short[d_i] }}</span>
+            <span class="label label--small tt-room">{{ today_str }}</span>
+          {%- else -%}
+            <span class="title title--small lg:title--base">{{ day_short[d_i] }}</span>
+            <span class="label label--small tt-room">&nbsp;</span>
+          {%- endif -%}
+        </td>
+        {%- for i in (0..last_i) -%}
+          {%- assign raw = arr[i] | default: "" | strip -%}
+          {%- if raw == "-" or raw == "—" or raw == "–" -%}{%- assign raw = "" -%}{%- endif -%}
+          {%- assign subj = raw | split: "|" | first | default: "" | strip -%}
+          {%- assign room = "" -%}
+          {%- if raw contains "|" -%}{%- assign room = raw | split: "|" | last | strip -%}{%- endif -%}
+          {%- assign cls = "" -%}
+          {%- if is_today and i == now_i -%}{%- assign cls = "tt-now" -%}{%- endif -%}
+          <td{% if cls != "" %} class="{{ cls }}"{% endif %}>
+            {%- if subj == "" -%}
+              <span class="label label--small tt-empty">—</span>
+            {%- else -%}
+              <span class="label lg:label--large" data-clamp="1">{{ subj }}</span>
+            {%- endif -%}
+            {%- if show_room -%}
+              <span class="label label--small tt-room" data-clamp="1">{%- if room != "" -%}{{ room }}{%- else -%}&nbsp;{%- endif -%}</span>
+            {%- endif -%}
+          </td>
+        {%- endfor -%}
+        {%- if has_acts -%}
+          <td class="tt-act-sep">
+            {%- assign ents = acts | split: "~" -%}
+            {%- if ents.size == 0 -%}
+              <span class="label label--small tt-empty">—</span>
+            {%- endif -%}
+            {%- for e in ents -%}
+              {%- assign ep = e | split: "|" -%}
+              {%- assign e_time = ep[0] | default: "" | strip -%}
+              {%- assign e_name = ep[1] | default: "" | strip -%}
+              {%- if e_name == "" -%}{%- assign e_name = e_time -%}{%- assign e_time = "" -%}{%- endif -%}
+              <span class="label label--small lg:label--base" data-clamp="1">{{ e_name }}</span>
+              {%- if e_time != "" -%}
+                <span class="label label--small tt-act-time" style="white-space:nowrap">{{ e_time }}</span>
+              {%- endif -%}
+            {%- endfor -%}
+          </td>
+        {%- endif -%}
+      </tr>
+    {%- endfor -%}
+    </tbody>
+  </table>
+
+{%- else -%}
+
+  {%- comment -%} --- days across the top, time down the side (default) --- {%- endcomment -%}
+  <table class="table table--base lg:table--large tt-grid tt-week" data-table-limit="true">
+    <thead>
+      <tr>
+        <th style="width:6%"><span class="title title--small lg:title--base">#</span></th>
+        <th style="width:13%"><span class="title title--small lg:title--base">Time</span></th>
         {%- for dk in day_keys -%}
           {%- assign d_no = forloop.index -%}
           {%- assign is_today = false -%}
           {%- if hl and is_weekend == false and d_no == dow -%}{%- assign is_today = true -%}{%- endif -%}
-          <th{% if is_today %} class="tt-today"{% endif %}>
+          <th style="width:16%"{% if is_today %} class="tt-today"{% endif %}>
             {%- if is_today -%}
               <span class="label label--inverted lg:label--large">{{ day_short[forloop.index0] }} · {{ today_str }}</span>
             {%- else -%}
@@ -50,9 +144,9 @@
               <span class="label label--small tt-empty">—</span>
             {%- else -%}
               <span class="label lg:label--large" data-clamp="1">{{ subj }}</span>
-              {%- if show_room and room != "" -%}
-                <span class="label label--small lg:label--base tt-room" style="display:block">{{ room }}</span>
-              {%- endif -%}
+            {%- endif -%}
+            {%- if show_room -%}
+              <span class="label label--small tt-room" data-clamp="1">{%- if room != "" -%}{{ room }}{%- else -%}&nbsp;{%- endif -%}</span>
             {%- endif -%}
           </td>
         {%- endfor -%}
@@ -70,12 +164,47 @@
         {%- endif -%}
       {%- endfor -%}
     {%- endfor -%}
+    {%- if has_acts -%}
+      <tr class="tt-act-sep">
+        <td colspan="2"><span class="label label--small lg:label--base">After school</span></td>
+        {%- for dk in day_keys -%}
+          {%- assign d_no = forloop.index -%}
+          {%- case dk -%}
+            {%- when "mon" -%}{%- assign acts = mon_acts -%}
+            {%- when "tue" -%}{%- assign acts = tue_acts -%}
+            {%- when "wed" -%}{%- assign acts = wed_acts -%}
+            {%- when "thu" -%}{%- assign acts = thu_acts -%}
+            {%- else -%}{%- assign acts = fri_acts -%}
+          {%- endcase -%}
+          {%- assign cls = "" -%}
+          {%- if hl and is_weekend == false and d_no == dow -%}{%- assign cls = "tt-today" -%}{%- endif -%}
+          <td{% if cls != "" %} class="{{ cls }}"{% endif %}>
+            {%- assign ents = acts | split: "~" -%}
+            {%- if ents.size == 0 -%}
+              <span class="label label--small tt-empty">—</span>
+            {%- endif -%}
+            {%- for e in ents -%}
+              {%- assign ep = e | split: "|" -%}
+              {%- assign e_time = ep[0] | default: "" | strip -%}
+              {%- assign e_name = ep[1] | default: "" | strip -%}
+              {%- if e_name == "" -%}{%- assign e_name = e_time -%}{%- assign e_time = "" -%}{%- endif -%}
+              <span class="label label--small lg:label--base" data-clamp="1">{{ e_name }}</span>
+              {%- if e_time != "" -%}
+                <span class="label label--small tt-act-time" style="white-space:nowrap">{{ e_time }}</span>
+              {%- endif -%}
+            {%- endfor -%}
+          </td>
+        {%- endfor -%}
+      </tr>
+    {%- endif -%}
     </tbody>
   </table>
+
+{%- endif -%}
 </div>
 
 <div class="title_bar">
   <img class="image" src="https://usetrmnl.com/images/plugins/trmnl--render.svg" />
-  <span class="title">Расписание</span>
+  <span class="title">Timetable</span>
   <span class="instance">{{ class_name }}{% if school_year != "" %} · {{ school_year }}{% endif %}</span>
 </div>

@@ -1,0 +1,144 @@
+---
+name: School Timetable
+strategy: static
+refresh_interval: 60
+static_data: '{"ok": true}'
+no_screen_padding: 'no'
+dark_mode: 'no'
+custom_fields:
+- keyname: about
+  name: About this plugin
+  field_type: author_bio
+  category: education,personal
+  description: A weekly school timetable. Everything is typed in by hand — no API, no accounts. One line = one lesson. The full screen shows the whole week with today and the current lesson highlighted; the half and quadrant views show today (Monday on weekends). Optimized for TRMNL X and TRMNL OG.
+
+- keyname: class_name
+  name: Class
+  field_type: string
+  description: For example 5.A or 7B. Shown in the header.
+  placeholder: 5.A
+  maxlength: 20
+
+- keyname: school_year
+  name: School year
+  field_type: string
+  optional: true
+  description: For example 2026/27.
+  placeholder: 2026/27
+  maxlength: 12
+
+- keyname: lesson_times
+  name: Lesson times
+  field_type: text
+  rows: 8
+  group: Time
+  description: "One line = one lesson, in order. Format 8:00-8:45."
+  help_text: Up to 8 lessons. Needed to highlight the current lesson.
+  default: |
+    8:00-8:45
+    8:55-9:40
+    10:00-10:45
+    10:55-11:40
+    11:50-12:35
+    12:45-13:30
+    13:40-14:25
+    14:35-15:20
+  placeholder: |
+    8:00-8:45
+    8:55-9:40
+    10:00-10:45
+
+- keyname: breaks
+  name: Breaks
+  field_type: text
+  rows: 3
+  optional: true
+  group: Time
+  description: "Which lesson it follows and its name, one per line. Format \"2: Long break\"."
+  help_text: Shown as a separate row between lessons. Leave empty if you don't need it. Only used when days are columns.
+  placeholder: |
+    2: Long break
+    5: Lunch
+
+- keyname: mon
+  name: Monday
+  field_type: text
+  rows: 8
+  group: Lessons
+  description: One line = one lesson (lesson 1 is the first line). An empty line or "-" means a free period.
+  placeholder: |
+    Maths
+    Czech
+    English
+    -
+    PE
+
+- keyname: tue
+  name: Tuesday
+  field_type: text
+  rows: 8
+  group: Lessons
+  description: One line = one lesson. An empty line or "-" means a free period.
+  optional: true
+
+- keyname: wed
+  name: Wednesday
+  field_type: text
+  rows: 8
+  group: Lessons
+  description: One line = one lesson. An empty line or "-" means a free period.
+  optional: true
+
+- keyname: thu
+  name: Thursday
+  field_type: text
+  rows: 8
+  group: Lessons
+  description: One line = one lesson. An empty line or "-" means a free period.
+  optional: true
+
+- keyname: fri
+  name: Friday
+  field_type: text
+  rows: 8
+  group: Lessons
+  description: One line = one lesson. An empty line or "-" means a free period.
+  optional: true
+
+- keyname: activities
+  name: After-school activities
+  field_type: text
+  rows: 6
+  optional: true
+  group: Lessons
+  description: 'One line = one activity, in the format "Mon | 15:00-16:30 | Football". The day comes first, then the time, then the name. You can drop the time: "Mon | Football".'
+  help_text: Any number per day, at any time — they are shown in a separate block after the lessons. Days - Mon, Tue, Wed, Thu, Fri.
+  placeholder: |
+    Mon | 15:00-16:30 | Football
+    Wed | 14:00-15:30 | Piano
+    Wed | 16:00-17:00 | Swimming
+    Fri | 15:00-17:00 | Art club
+
+- keyname: orientation
+  name: Grid orientation
+  field_type: select
+  group: Look
+  options:
+  - Days as columns
+  - Days as rows (time across the top)
+  default: Days as columns
+  description: Full screen only. "Days as columns" puts the days across the top and the lessons down the side; "Days as rows" is the other way round. Breaks are only shown in the "Days as columns" layout.
+
+- keyname: highlight_today
+  name: Highlight today
+  field_type: boolean
+  default: true
+  group: Look
+  description: Emphasise today's column (or row) and the current lesson.
+
+- keyname: show_room
+  name: Show room
+  field_type: boolean
+  default: true
+  group: Look
+  description: If a lesson line contains "|", the text after it is the room or the teacher. For example "Maths | 204".

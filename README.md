@@ -1,36 +1,47 @@
-# Расписание уроков — приватный плагин TRMNL
+# School Timetable — private TRMNL plugin
 
-Ручной ввод, без API. Оптимизирован под TRMNL X (1872×1404, 4-bit), работает и на TRMNL OG.
+Manual input, no API. Optimized for TRMNL X (1872×1404, 4-bit), also works on TRMNL OG.
 
-## Установка
+## Installation
 
-1. Собрать ZIP: `pip install pyyaml && python3 src/build.py` → появится `trmnl-raspisanie-urokov.zip` (или взять готовый из Releases).
-   Затем TRMNL → Plugins → **Private Plugin** → **Import new** → выбрать ZIP.
-2. Открыть настройки плагина и заполнить форму:
-   - **Класс**, **Учебный год** — для заголовка.
-   - **Время уроков** — одна строка = один урок: `8:00-8:45`. По умолчанию уже стоит типичное чешское расписание.
-   - **Перемены** (необязательно) — `2: Большая перемена` → строка появится после 2-го урока.
-   - **Понедельник … Пятница** — одна строка = один урок. Пустая строка или `-` = окно.
-     Кабинет/учитель — через `|`: `Математика | 204`.
-3. Save → **Force Refresh** → проверить превью во всех layout (Full / Half / Quadrant).
+1. Build the ZIP: `pip install pyyaml && python3 src/build.py` → produces `trmnl-school-timetable.zip` (or grab a prebuilt one from Releases).
+   Then TRMNL → Plugins → **Private Plugin** → **Import new** → pick the ZIP.
+2. Open the plugin settings and fill in the form:
+   - **Class**, **School year** — used in the header.
+   - **Lesson times** — one line per lesson: `8:00-8:45`. A typical Czech schedule is pre-filled by default.
+   - **Breaks** (optional) — `2: Long break` → the line appears after the 2nd lesson.
+   - **Monday … Friday** — one line per lesson. An empty line or `-` means a free period.
+     Room/teacher go after a `|`: `Maths | 204`.
+   - **After-school activities** (optional) — one line per activity: `Mon | 15:00-16:30 | Football`.
+     Day first, then the time, then the name; the time can be dropped (`Mon | Football`).
+     Any number per day, at any time.
+   - **Grid orientation** — `Days as columns` (default) or `Days as rows (time across the top)`.
+3. Save → **Force Refresh** → check the preview in every layout (Full / Half / Quadrant).
 
-## Что показывает
+## What it shows
 
-| Layout | Содержимое |
+| Layout | Contents |
 |---|---|
-| Full | Сетка на неделю Пн–Пт. Сегодняшняя колонка выделена, текущий урок — инверсией. На OG кабинеты в сетке скрыты (мало места), на X — показаны. |
-| Half vertical / horizontal | Сегодня: №, время, предмет, кабинет. Текущий урок инверсией. |
-| Quadrant | Сегодня, компактно, только предметы (окна пропущены). |
+| Full | Mon–Fri week grid in the chosen orientation. Today is highlighted, the current lesson is inverted. After-school activities get their own row (or column) below/next to the lessons. On OG the rooms are hidden in the grid (not enough space), on X they are shown. |
+| Half vertical / horizontal | Today: #, time, subject, room, then an **After school** block if that day has any activities. Current lesson inverted. |
+| Quadrant | Today, compact, subjects only (free periods skipped), plus the activities block. |
 
-В выходные вместо «сегодня» показывается понедельник с пометкой «выходной».
+On weekends, Monday is shown instead of "today", marked as "day off".
 
-Время берётся из часового пояса аккаунта TRMNL (`trmnl.user.utc_offset`) — проверьте, что он задан в Account.
+All grid cells are equal width (fixed table layout) and their contents are centred.
 
-## Исходники
+**Grid orientation.** `Days as columns` is the classic view: days across the top, lesson number and
+time down the side, breaks shown as their own row. `Days as rows` flips it — days down the side,
+lesson number and time across the top, which fits long subject names better. Breaks are only drawn
+in the `Days as columns` layout; in the other one the times in the header already show the gaps.
 
-`src/` — `settings.yml`, `_prep.liquid` (общая подготовка данных), `full.liquid`, `_today.liquid`, `build.py`.
-`python3 src/build.py` пересобирает ZIP (prep-блок вставляется в каждый view, потому что импорт ZIP не гарантирует shared-markup).
+The time comes from the TRMNL account's timezone (`trmnl.user.utc_offset`) — make sure it is set in Account.
 
-## Если захочется Bakaláři
+## Sources
 
-Полностью автоматом через Polling не получится: API требует `POST /api/login` → токен → `GET /api/3/timetable/actual`. Нужен посредник (Cloudflare Worker), который отдаёт готовый JSON. Шаблон тогда почти не меняется — только источник массивов `mon_arr…fri_arr`.
+`src/` — `settings.yml`, `_prep.liquid` (shared data preparation), `full.liquid`, `_today.liquid`, `build.py`.
+`python3 src/build.py` rebuilds the ZIP (the prep block is inlined into every view, because importing a ZIP does not guarantee shared markup support).
+
+## If you ever want Bakaláři
+
+Full automation via Polling won't work: the API requires `POST /api/login` → token → `GET /api/3/timetable/actual`. You'd need a middleman (a Cloudflare Worker) that serves ready-made JSON. The template would barely change then — only the source of the `mon_arr…fri_arr` arrays.
