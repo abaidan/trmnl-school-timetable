@@ -14,6 +14,12 @@
   silently dropping rows.
 {%- endcomment -%}
 {%- assign tt_fill = 88 -%}
+{%- comment -%}
+  Column count when days run down the side: one per lesson, plus one for the
+  activities column when there is anything to put in it. has_acts is only true
+  once a line has actually parsed into a day, so an empty or unparseable
+  activities field adds no column. The day name takes the remaining 13%.
+{%- endcomment -%}
 {%- if days_as_rows -%}
   {%- assign n_cols = n_rows -%}
   {%- if has_acts -%}{%- assign n_cols = n_cols | plus: 1 -%}{%- endif -%}
@@ -96,7 +102,7 @@
           {%- assign ink_main = bold -%}
           {%- assign ink_dim = "text--gray-55" | append: bold -%}
           {%- if is_today and i == now_i -%}
-            {%- assign cls = cls | append: " tt-now bg--black" -%}
+            {%- assign cls = cls | append: " bg--black" -%}
             {%- assign ink = "text--white" -%}
             {%- assign ink_main = "text--white" -%}
             {%- assign ink_dim = "text--white" -%}
@@ -199,7 +205,7 @@
             {%- assign ink_main = ink_main | append: " text--bold" -%}
             {%- assign ink_dim = ink_dim | append: " text--bold" -%}
             {%- if i == now_i -%}
-              {%- assign cls = cls | append: " tt-now bg--black" -%}
+              {%- assign cls = cls | append: " bg--black" -%}
               {%- assign ink = "text--white" -%}
               {%- assign ink_main = "text--white" -%}
               {%- assign ink_dim = "text--white" -%}

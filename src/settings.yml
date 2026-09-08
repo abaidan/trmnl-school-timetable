@@ -144,6 +144,10 @@ custom_fields:
   - Days as columns
   - Days as rows (time across the top)
   default: Days as columns
+  conditional_validation:
+  - when: Days as rows (time across the top)
+    hidden:
+    - breaks
   description: Full screen only. "Days as columns" puts the days across the top and the lessons down the side; "Days as rows" is the other way round. Breaks are only shown in the "Days as columns" layout.
 - keyname: highlight_today
   name: Highlight today
