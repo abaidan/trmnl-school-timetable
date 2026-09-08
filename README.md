@@ -12,6 +12,7 @@ Manual input, no API. Optimized for TRMNL X (1872×1404, 4-bit), also works on T
    - **Breaks** (optional) — `2: Long break` → the line appears after the 2nd lesson.
    - **Monday … Friday** — one line per lesson. An empty line or `-` means a free period.
      Room/teacher go after a `|`: `Maths | 204`.
+     Use `//` to break a cell across two lines: `Physical // Education`.
    - **After-school activities** (optional) — one line per activity: `Mon | 15:00-16:30 | Football`.
      Day first, then the time, then the name; the time can be dropped (`Mon | Football`).
      Any number per day, at any time.
@@ -29,6 +30,20 @@ Manual input, no API. Optimized for TRMNL X (1872×1404, 4-bit), also works on T
 On weekends, Monday is shown instead of "today", marked as "day off".
 
 All grid cells are equal width (fixed table layout) and their contents are centred.
+
+**Line breaks.** `//` anywhere in a subject, room, break name or activity name splits it across
+lines, and the cell's clamp grows to match so nothing is truncated:
+
+```
+Mon | BigWall // 16:00     →   BigWall
+                               16:00
+
+Physical // Education      →   Physical
+                               Education
+```
+
+Without a `//` the text stays clamped to a single line, so long names are still cut off rather than
+reflowing — put the break where you want it.
 
 **Grid orientation.** `Days as columns` is the classic view: days across the top, lesson number and
 time down the side, breaks shown as their own row. `Days as rows` flips it — days down the side,

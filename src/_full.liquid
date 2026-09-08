@@ -61,10 +61,13 @@
             {%- if subj == "" -%}
               <span class="label label--small tt-empty">—</span>
             {%- else -%}
-              <span class="label lg:label--large" data-clamp="1">{{ subj }}</span>
+              {%- assign subj_n = subj | split: "//" | size -%}
+              <span class="label lg:label--large" data-clamp="{{ subj_n }}">{{ subj | replace: " //", "//" | replace: "// ", "//" | replace: "//", "<br>" }}</span>
             {%- endif -%}
             {%- if show_room -%}
-              <span class="label label--small tt-room" data-clamp="1">{%- if room != "" -%}{{ room }}{%- else -%}&nbsp;{%- endif -%}</span>
+              {%- assign room_n = room | split: "//" | size -%}
+              {%- if room_n < 1 -%}{%- assign room_n = 1 -%}{%- endif -%}
+              <span class="label label--small tt-room" data-clamp="{{ room_n }}">{%- if room != "" -%}{{ room | replace: " //", "//" | replace: "// ", "//" | replace: "//", "<br>" }}{%- else -%}&nbsp;{%- endif -%}</span>
             {%- endif -%}
           </td>
         {%- endfor -%}
@@ -79,7 +82,8 @@
               {%- assign e_time = ep[0] | default: "" | strip -%}
               {%- assign e_name = ep[1] | default: "" | strip -%}
               {%- if e_name == "" -%}{%- assign e_name = e_time -%}{%- assign e_time = "" -%}{%- endif -%}
-              <span class="label label--small lg:label--base" data-clamp="1">{{ e_name }}</span>
+              {%- assign e_n = e_name | split: "//" | size -%}
+              <span class="label label--small lg:label--base" data-clamp="{{ e_n }}">{{ e_name | replace: " //", "//" | replace: "// ", "//" | replace: "//", "<br>" }}</span>
               {%- if e_time != "" -%}
                 <span class="label label--small tt-act-time" style="white-space:nowrap">{{ e_time }}</span>
               {%- endif -%}
@@ -143,10 +147,13 @@
             {%- if subj == "" -%}
               <span class="label label--small tt-empty">—</span>
             {%- else -%}
-              <span class="label lg:label--large" data-clamp="1">{{ subj }}</span>
+              {%- assign subj_n = subj | split: "//" | size -%}
+              <span class="label lg:label--large" data-clamp="{{ subj_n }}">{{ subj | replace: " //", "//" | replace: "// ", "//" | replace: "//", "<br>" }}</span>
             {%- endif -%}
             {%- if show_room -%}
-              <span class="label label--small tt-room" data-clamp="1">{%- if room != "" -%}{{ room }}{%- else -%}&nbsp;{%- endif -%}</span>
+              {%- assign room_n = room | split: "//" | size -%}
+              {%- if room_n < 1 -%}{%- assign room_n = 1 -%}{%- endif -%}
+              <span class="label label--small tt-room" data-clamp="{{ room_n }}">{%- if room != "" -%}{{ room | replace: " //", "//" | replace: "// ", "//" | replace: "//", "<br>" }}{%- else -%}&nbsp;{%- endif -%}</span>
             {%- endif -%}
           </td>
         {%- endfor -%}
@@ -158,7 +165,7 @@
           {%- assign b_name = bs | split: ":" | last | strip -%}
           {%- if b_no == lesson_no and i < last_i -%}
             <tr class="tt-break">
-              <td colspan="7"><span class="label label--small lg:label--base">{{ b_name }}</span></td>
+              <td colspan="7"><span class="label label--small lg:label--base">{{ b_name | replace: " //", "//" | replace: "// ", "//" | replace: "//", "<br>" }}</span></td>
             </tr>
           {%- endif -%}
         {%- endif -%}
@@ -188,7 +195,8 @@
               {%- assign e_time = ep[0] | default: "" | strip -%}
               {%- assign e_name = ep[1] | default: "" | strip -%}
               {%- if e_name == "" -%}{%- assign e_name = e_time -%}{%- assign e_time = "" -%}{%- endif -%}
-              <span class="label label--small lg:label--base" data-clamp="1">{{ e_name }}</span>
+              {%- assign e_n = e_name | split: "//" | size -%}
+              <span class="label label--small lg:label--base" data-clamp="{{ e_n }}">{{ e_name | replace: " //", "//" | replace: "// ", "//" | replace: "//", "<br>" }}</span>
               {%- if e_time != "" -%}
                 <span class="label label--small tt-act-time" style="white-space:nowrap">{{ e_time }}</span>
               {%- endif -%}

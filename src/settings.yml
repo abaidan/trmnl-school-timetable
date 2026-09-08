@@ -96,7 +96,7 @@ custom_fields:
   field_type: text
   rows: 8
   group: Lessons
-  description: One line = one lesson (lesson 1 is the first line). An empty line or "-" means a free period.
+  description: One line = one lesson (lesson 1 is the first line). An empty line or "-" means a free period. Use "//" to break a cell across two lines.
   placeholder: |
     Maths
     Czech
@@ -109,7 +109,7 @@ custom_fields:
   field_type: text
   rows: 8
   group: Lessons
-  description: One line = one lesson. An empty line or "-" means a free period.
+  description: One line = one lesson. An empty line or "-" means a free period. Use "//" to break a cell across two lines.
   optional: true
 
 - keyname: wed
@@ -117,7 +117,7 @@ custom_fields:
   field_type: text
   rows: 8
   group: Lessons
-  description: One line = one lesson. An empty line or "-" means a free period.
+  description: One line = one lesson. An empty line or "-" means a free period. Use "//" to break a cell across two lines.
   optional: true
 
 - keyname: thu
@@ -125,7 +125,7 @@ custom_fields:
   field_type: text
   rows: 8
   group: Lessons
-  description: One line = one lesson. An empty line or "-" means a free period.
+  description: One line = one lesson. An empty line or "-" means a free period. Use "//" to break a cell across two lines.
   optional: true
 
 - keyname: fri
@@ -133,7 +133,7 @@ custom_fields:
   field_type: text
   rows: 8
   group: Lessons
-  description: One line = one lesson. An empty line or "-" means a free period.
+  description: One line = one lesson. An empty line or "-" means a free period. Use "//" to break a cell across two lines.
   optional: true
 
 - keyname: activities
@@ -143,7 +143,7 @@ custom_fields:
   optional: true
   group: Lessons
   description: 'One line = one activity, in the format "Mon | 15:00-16:30 | Football". The day comes first, then the time, then the name. You can drop the time: "Mon | Football".'
-  help_text: Any number per day, at any time — they are shown in a separate block after the lessons. Days - Mon, Tue, Wed, Thu, Fri.
+  help_text: Any number per day, at any time — they are shown in a separate block after the lessons. Days - Mon, Tue, Wed, Thu, Fri. Use "//" inside a name to break it across two lines.
   placeholder: |
     Mon | 15:00-16:30 | Football
     Wed | 14:00-15:30 | Piano

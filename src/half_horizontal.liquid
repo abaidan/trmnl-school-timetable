@@ -209,11 +209,14 @@
           {%- if subj == "" -%}
             <span class="label label--small tt-empty">—</span>
           {%- else -%}
-            <span class="label {{ tt_subj_size }}" data-clamp="1">{{ subj }}</span>
+            {%- assign subj_n = subj | split: "//" | size -%}
+            <span class="label {{ tt_subj_size }}" data-clamp="{{ subj_n }}">{{ subj | replace: " //", "//" | replace: "// ", "//" | replace: "//", "<br>" }}</span>
           {%- endif -%}
         </td>
         {%- if tt_show_room -%}
-        <td style="width:26%"><span class="label label--small tt-room" data-clamp="1">{{ room }}</span></td>
+        {%- assign room_n = room | split: "//" | size -%}
+        {%- if room_n < 1 -%}{%- assign room_n = 1 -%}{%- endif -%}
+        <td style="width:26%"><span class="label label--small tt-room" data-clamp="{{ room_n }}">{{ room | replace: " //", "//" | replace: "// ", "//" | replace: "//", "<br>" }}</span></td>
         {%- endif -%}
       </tr>
     {%- endfor -%}
@@ -233,7 +236,8 @@
           {%- if e_name == "" -%}{%- assign e_name = e_time -%}{%- assign e_time = "" -%}{%- endif -%}
           <tr>
             <td style="width:38%"><span class="label label--small" style="white-space:nowrap">{{ e_time }}</span></td>
-            <td><span class="label {{ tt_subj_size }}" data-clamp="1">{{ e_name }}</span></td>
+            {%- assign e_n = e_name | split: "//" | size -%}
+            <td><span class="label {{ tt_subj_size }}" data-clamp="{{ e_n }}">{{ e_name | replace: " //", "//" | replace: "// ", "//" | replace: "//", "<br>" }}</span></td>
           </tr>
         {%- endfor -%}
       </tbody>
