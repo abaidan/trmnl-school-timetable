@@ -1,17 +1,21 @@
 {%- comment -%} ===== FULL: the whole week ===== {%- endcomment -%}
 
 {%- comment -%}
-  Fill the screen. The framework already gives .layout a definite height of
-  screen - gaps - title bar and centres its children, which is what left the
-  grid sitting in a band with dead space above and below. layout--stretch-x
-  makes the table a flex:1 child of that, so height:100% resolves against the
-  available area exactly and the table distributes it across its rows.
+  Fill the screen: stretch the grid instead of letting the rows hug their
+  content, which left it sitting in a band with dead space above and below.
 
-  Do not reach for vh here: that measures the whole viewport, title bar and
-  gaps included, so it overshoots and data-table-limit starts dropping rows.
+  tt_fill is the one knob. It is a percentage of .layout, which the framework
+  sizes to screen - gaps - title bar; 100 overflowed on a real device, most
+  likely because that rule depends on :has() and the renderer falls back to a
+  height that still includes the title bar. Under 100 covers the difference.
+
+  Do not swap this for vh: that measures the whole viewport, title bar and
+  gaps included, so it overshoots badly and data-table-limit responds by
+  silently dropping rows.
 {%- endcomment -%}
+{%- assign tt_fill = 88 -%}
 <style>
-  .tt-week { height: 100%; }
+  .tt-week { height: {{ tt_fill }}%; }
 </style>
 
 <div class="layout layout--col layout--stretch-x gap--small">
