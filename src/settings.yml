@@ -1,20 +1,15 @@
 ---
-name: School Timetable
-description: ''
 strategy: static
-refresh_interval: 60
-static_data: '{"ok": true}'
 no_screen_padding: 'no'
 dark_mode: 'no'
-
-# --- kept in sync with the TRMNL export; the sync bot writes these back ---
-id: 470872
-framework_version: 3.3.1
+static_data: '{"ok": true}'
 polling_verb: get
+framework_version: 3.3.1
 serverless_language: ''
 polling_url: ''
 polling_headers: ''
 polling_body: ''
+id: 470872
 oauth_enabled: 'false'
 oauth_pkce_enabled: 'no'
 oauth_authorize_url: ''
@@ -35,21 +30,18 @@ oauth_token_field_name: ''
 oauth_expiry_field_name: ''
 oauth_expiry_strategy: ''
 oauth_fixed_expiry_ms: ''
-
 custom_fields:
 - keyname: about
   name: About this plugin
   field_type: author_bio
   category: education,personal
   description: A weekly school timetable. Everything is typed in by hand — no API, no accounts. One line = one lesson. The full screen shows the whole week with today and the current lesson highlighted; the half and quadrant views show today (Monday on weekends). Optimized for TRMNL X and TRMNL OG.
-
 - keyname: class_name
   name: Class
   field_type: string
   description: For example 5.A or 7B. Shown in the header.
   placeholder: 5.A
   maxlength: 20
-
 - keyname: school_year
   name: School year
   field_type: string
@@ -57,13 +49,12 @@ custom_fields:
   description: For example 2026/27.
   placeholder: 2026/27
   maxlength: 12
-
 - keyname: lesson_times
   name: Lesson times
   field_type: text
   rows: 8
   group: Time
-  description: "One line = one lesson, in order. Format 8:00-8:45."
+  description: One line = one lesson, in order. Format 8:00-8:45.
   help_text: Up to 8 lessons. Needed to highlight the current lesson.
   default: |
     8:00-8:45
@@ -78,19 +69,17 @@ custom_fields:
     8:00-8:45
     8:55-9:40
     10:00-10:45
-
 - keyname: breaks
   name: Breaks
   field_type: text
   rows: 3
   optional: true
   group: Time
-  description: "Which lesson it follows and its name, one per line. Format \"2: Long break\"."
+  description: 'Which lesson it follows and its name, one per line. Format "2: Long break".'
   help_text: Shown as a separate row between lessons. Leave empty if you don't need it. Only used when days are columns.
   placeholder: |
     2: Long break
     5: Lunch
-
 - keyname: mon
   name: Monday
   field_type: text
@@ -103,7 +92,6 @@ custom_fields:
     English
     -
     PE
-
 - keyname: tue
   name: Tuesday
   field_type: text
@@ -111,7 +99,6 @@ custom_fields:
   group: Lessons
   description: One line = one lesson. An empty line or "-" means a free period. Use "//" to break a cell across two lines.
   optional: true
-
 - keyname: wed
   name: Wednesday
   field_type: text
@@ -119,7 +106,6 @@ custom_fields:
   group: Lessons
   description: One line = one lesson. An empty line or "-" means a free period. Use "//" to break a cell across two lines.
   optional: true
-
 - keyname: thu
   name: Thursday
   field_type: text
@@ -127,7 +113,6 @@ custom_fields:
   group: Lessons
   description: One line = one lesson. An empty line or "-" means a free period. Use "//" to break a cell across two lines.
   optional: true
-
 - keyname: fri
   name: Friday
   field_type: text
@@ -135,7 +120,6 @@ custom_fields:
   group: Lessons
   description: One line = one lesson. An empty line or "-" means a free period. Use "//" to break a cell across two lines.
   optional: true
-
 - keyname: activities
   name: After-school activities
   field_type: text
@@ -149,7 +133,6 @@ custom_fields:
     Wed | 14:00-15:30 | Piano
     Wed | 16:00-17:00 | Swimming
     Fri | 15:00-17:00 | Art club
-
 - keyname: orientation
   name: Grid orientation
   field_type: select
@@ -159,17 +142,18 @@ custom_fields:
   - Days as rows (time across the top)
   default: Days as columns
   description: Full screen only. "Days as columns" puts the days across the top and the lessons down the side; "Days as rows" is the other way round. Breaks are only shown in the "Days as columns" layout.
-
 - keyname: highlight_today
   name: Highlight today
   field_type: boolean
   default: true
   group: Look
   description: Emphasise today's column (or row) and the current lesson.
-
 - keyname: show_room
   name: Show room
   field_type: boolean
   default: true
   group: Look
   description: If a lesson line contains "|", the text after it is the room or the teacher. For example "Maths | 204".
+name: School Timetable
+description: ''
+refresh_interval: 60
