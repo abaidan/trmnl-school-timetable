@@ -79,7 +79,7 @@ custom_fields:
   optional: true
   group: Time
   description: 'Which lesson it follows and its name, one per line. Format "2: Long break".'
-  help_text: Shown as a separate row between lessons. Leave empty if you don't need it. Only used when days are columns.
+  help_text: Shown as a separate row between lessons. Leave empty if you don't need it. Only used with the "Days as columns" orientation, and hidden entirely when you pick the other one.
   placeholder: |
     2: Long break
     5: Lunch
