@@ -150,7 +150,7 @@ custom_fields:
   field_type: boolean
   default: true
   group: Look
-  description: Emphasise today's column (or row) and the current lesson.
+  description: Emphasize today's column (or row) and the current lesson.
 - keyname: show_room
   name: Show room
   field_type: boolean
