@@ -135,24 +135,27 @@
     overflow: hidden;
   }
   .tt-grid th > span, .tt-grid td > span { display: block; text-align: center; }
+  .tt-nw { white-space: nowrap; }
   .tt-today .label, .tt-today .title { font-weight: 700; }
   .tt-today { box-shadow: inset 2px 0 0 #000, inset -2px 0 0 #000; }
   .tt-today-row { box-shadow: inset 0 2px 0 #000, inset 0 -2px 0 #000; }
   .tt-today-row .label, .tt-today-row .title { font-weight: 700; }
   .tt-now { background: #000; }
-  .tt-now .label, .tt-now .title { color: #fff; }
-  .tt-now .tt-room, .tt-now .tt-act-time { color: #fff; opacity: .8; }
+  /* the inverted cell overrides text--gray-*, which dithers text via a clipped
+     background-image — that has to be cancelled too, not just the colour */
+  .tt-now span.label, .tt-now span.title {
+    color: #fff;
+    background-image: none;
+    -webkit-text-fill-color: #fff;
+  }
   .tt-break td { padding-top: 0 !important; padding-bottom: 0 !important; }
-  .tt-break .label { opacity: .7; }
-  .tt-room { opacity: .65; }
   /* on small screens (OG) the room line in the week grid does not fit */
   .screen:not(.screen--lg) .tt-week .tt-room { display: none !important; }
-  .tt-empty { opacity: .35; }
-  .tt-act-time { opacity: .65; }
   /* the activities block is divided off along whichever edge faces the lessons:
      a rule under the row, down the side of the column, above the today-view list */
   .tt-act-sep { border-top: 2px solid #000; }
   .tt-act-row td { border-top: 2px solid #000; }
   .tt-act-col { border-left: 2px solid #000; }
+  .tt-acts-head { display: block; padding-top: 4px; }
   .tt-now-time { font-weight: 700; }
 </style>

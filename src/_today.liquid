@@ -25,6 +25,14 @@
   {%- assign w_time = "30%" -%}
   {%- assign w_subj = "58%" -%}
 {%- endif -%}
+<style>
+  {%- comment -%} table-layout is fixed, so the first row sets every column {%- endcomment -%}
+  .tt-list tr:first-child td:nth-child(1) { width: {{ w_no }}; }
+  .tt-list tr:first-child td:nth-child(2) { width: {{ w_time }}; }
+  .tt-list tr:first-child td:nth-child(3) { width: {{ w_subj }}; }
+  .tt-list tr:first-child td:nth-child(4) { width: 26%; }
+  .tt-acts tr:first-child td:nth-child(1) { width: 38%; }
+</style>
 
 <div class="layout layout--col layout--stretch-x gap--small">
   <div class="flex flex--row flex--between flex--center-y">
@@ -36,7 +44,7 @@
       <span class="label label--large">No lessons</span>
     </div>
   {%- else -%}
-  <table class="table {{ tt_size }} tt-grid" data-table-limit="true">
+  <table class="table {{ tt_size }} tt-grid tt-list" data-table-limit="true">
     <tbody>
     {%- for i in (0..last_i) -%}
       {%- assign lesson_no = i | plus: 1 -%}
@@ -48,11 +56,11 @@
       {%- assign t = times_arr[i] | default: "" | strip | replace: "–", "-" | replace: "—", "-" | replace: " ", "" | replace: "-", "–" -%}
       {%- if tt_skip_empty and subj == "" -%}{%- continue -%}{%- endif -%}
       <tr{% if i == now_i and is_weekend == false %} class="tt-now"{% endif %}>
-        <td style="width:{{ w_no }}"><span class="label label--small">{{ lesson_no }}</span></td>
-        <td style="width:{{ w_time }}"><span class="label label--small" style="white-space:nowrap">{{ t }}</span></td>
-        <td style="width:{{ w_subj }}">
+        <td><span class="label label--small">{{ lesson_no }}</span></td>
+        <td><span class="label label--small tt-nw">{{ t }}</span></td>
+        <td>
           {%- if subj == "" -%}
-            <span class="label label--small tt-empty">—</span>
+            <span class="label label--small tt-empty text--gray-55">—</span>
           {%- else -%}
             {%- assign subj_n = subj | split: "//" | size -%}
             <span class="label {{ tt_subj_size }}" data-clamp="{{ subj_n }}">{{ subj | replace: " //", "//" | replace: "// ", "//" | replace: "//", "<br>" }}</span>
@@ -61,7 +69,7 @@
         {%- if tt_show_room -%}
         {%- assign room_n = room | split: "//" | size -%}
         {%- if room_n < 1 -%}{%- assign room_n = 1 -%}{%- endif -%}
-        <td style="width:26%"><span class="label label--small tt-room" data-clamp="{{ room_n }}">{{ room | replace: " //", "//" | replace: "// ", "//" | replace: "//", "<br>" }}</span></td>
+        <td><span class="label label--small tt-room text--gray-30" data-clamp="{{ room_n }}">{{ room | replace: " //", "//" | replace: "// ", "//" | replace: "//", "<br>" }}</span></td>
         {%- endif -%}
       </tr>
     {%- endfor -%}
@@ -70,8 +78,8 @@
   {%- endif -%}
 
   {%- if acts != "" -%}
-    <span class="title title--small tt-act-sep" style="display:block;padding-top:4px">After school</span>
-    <table class="table {{ tt_size }} tt-grid" data-table-limit="true">
+    <span class="title title--small tt-act-sep tt-acts-head">After school</span>
+    <table class="table {{ tt_size }} tt-grid tt-acts" data-table-limit="true">
       <tbody>
         {%- assign ents = acts | split: "~" -%}
         {%- for e in ents -%}
@@ -80,7 +88,7 @@
           {%- assign e_name = ep[1] | default: "" | strip -%}
           {%- if e_name == "" -%}{%- assign e_name = e_time -%}{%- assign e_time = "" -%}{%- endif -%}
           <tr>
-            <td style="width:38%"><span class="label label--small" style="white-space:nowrap">{{ e_time }}</span></td>
+            <td><span class="label label--small text--gray-30 tt-nw">{{ e_time }}</span></td>
             {%- assign e_n = e_name | split: "//" | size -%}
             <td><span class="label {{ tt_subj_size }}" data-clamp="{{ e_n }}">{{ e_name | replace: " //", "//" | replace: "// ", "//" | replace: "//", "<br>" }}</span></td>
           </tr>

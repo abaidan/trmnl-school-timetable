@@ -155,5 +155,5 @@ custom_fields:
   group: Look
   description: If a lesson line contains "|", the text after it is the room or the teacher. For example "Maths | 204".
 name: School Timetable
-description: ''
+description: Hand-typed weekly school timetable
 refresh_interval: 60
