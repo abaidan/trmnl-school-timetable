@@ -126,36 +126,21 @@
   {%- endfor -%}
 {%- endif -%}
 <style>
-  /* equal-sized cells: fixed layout + explicit column widths, centred content */
-  .tt-grid { table-layout: fixed; width: 100%; }
-  .tt-grid th, .tt-grid td {
-    text-align: center !important;
-    vertical-align: middle !important;
-    padding: 5px 6px !important;
-    overflow: hidden;
-  }
-  .tt-grid th > span, .tt-grid td > span { display: block; text-align: center; }
+  {%- comment -%}
+    Only the few properties the Framework has no utility class for. Anything
+    the recipe guidelines list as unnecessary is done with Framework classes
+    on the elements instead.
+  {%- endcomment -%}
+  .tt-grid { table-layout: fixed; }
+  .tt-grid th, .tt-grid td { vertical-align: middle; overflow: hidden; }
   .tt-nw { white-space: nowrap; }
-  .tt-today .label, .tt-today .title { font-weight: 700; }
   .tt-today { box-shadow: inset 2px 0 0 #000, inset -2px 0 0 #000; }
   .tt-today-row { box-shadow: inset 0 2px 0 #000, inset 0 -2px 0 #000; }
+  .tt-today .label, .tt-today .title,
   .tt-today-row .label, .tt-today-row .title { font-weight: 700; }
-  .tt-now { background: #000; }
-  /* the inverted cell overrides text--gray-*, which dithers text via a clipped
-     background-image — that has to be cancelled too, not just the colour */
-  .tt-now span.label, .tt-now span.title {
-    color: #fff;
-    background-image: none;
-    -webkit-text-fill-color: #fff;
-  }
-  .tt-break td { padding-top: 0 !important; padding-bottom: 0 !important; }
-  /* on small screens (OG) the room line in the week grid does not fit */
-  .screen:not(.screen--lg) .tt-week .tt-room { display: none !important; }
-  /* the activities block is divided off along whichever edge faces the lessons:
-     a rule under the row, down the side of the column, above the today-view list */
+  .tt-now-time { font-weight: 700; }
+  /* the activities block is divided off along whichever edge faces the lessons */
   .tt-act-sep { border-top: 2px solid #000; }
   .tt-act-row td { border-top: 2px solid #000; }
   .tt-act-col { border-left: 2px solid #000; }
-  .tt-acts-head { display: block; padding-top: 4px; }
-  .tt-now-time { font-weight: 700; }
 </style>

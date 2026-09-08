@@ -44,7 +44,7 @@
       <span class="label label--large">No lessons</span>
     </div>
   {%- else -%}
-  <table class="table {{ tt_size }} tt-grid tt-list" data-table-limit="true">
+  <table class="table {{ tt_size }} tt-grid tt-list w--full text--center" data-table-limit="true">
     <tbody>
     {%- for i in (0..last_i) -%}
       {%- assign lesson_no = i | plus: 1 -%}
@@ -55,21 +55,31 @@
       {%- if raw contains "|" -%}{%- assign room = raw | split: "|" | last | strip -%}{%- endif -%}
       {%- assign t = times_arr[i] | default: "" | strip | replace: "–", "-" | replace: "—", "-" | replace: " ", "" | replace: "-", "–" -%}
       {%- if tt_skip_empty and subj == "" -%}{%- continue -%}{%- endif -%}
-      <tr{% if i == now_i and is_weekend == false %} class="tt-now"{% endif %}>
-        <td><span class="label label--small">{{ lesson_no }}</span></td>
-        <td><span class="label label--small tt-nw">{{ t }}</span></td>
-        <td>
+      {%- assign ink = "text--gray-30" -%}
+      {%- assign ink_main = "" -%}
+      {%- assign ink_dim = "text--gray-55" -%}
+      {%- assign rcls = "" -%}
+      {%- if i == now_i and is_weekend == false -%}
+        {%- assign rcls = "tt-now bg--black" -%}
+        {%- assign ink = "text--white" -%}
+        {%- assign ink_main = "text--white" -%}
+        {%- assign ink_dim = "text--white" -%}
+      {%- endif -%}
+      <tr{% if rcls != "" %} class="{{ rcls }}"{% endif %}>
+        <td class="py--1 px--1"><span class="label label--small block {{ ink_main }}">{{ lesson_no }}</span></td>
+        <td class="py--1 px--1"><span class="label label--small tt-nw block {{ ink_main }}">{{ t }}</span></td>
+        <td class="py--1 px--1">
           {%- if subj == "" -%}
-            <span class="label label--small tt-empty text--gray-55">—</span>
+            <span class="label label--small {{ ink_dim }} block">—</span>
           {%- else -%}
             {%- assign subj_n = subj | split: "//" | size -%}
-            <span class="label {{ tt_subj_size }}" data-clamp="{{ subj_n }}">{{ subj | replace: " //", "//" | replace: "// ", "//" | replace: "//", "<br>" }}</span>
+            <span class="label {{ tt_subj_size }} block {{ ink_main }}" data-clamp="{{ subj_n }}">{{ subj | replace: " //", "//" | replace: "// ", "//" | replace: "//", "<br>" }}</span>
           {%- endif -%}
         </td>
         {%- if tt_show_room -%}
         {%- assign room_n = room | split: "//" | size -%}
         {%- if room_n < 1 -%}{%- assign room_n = 1 -%}{%- endif -%}
-        <td><span class="label label--small tt-room text--gray-30" data-clamp="{{ room_n }}">{{ room | replace: " //", "//" | replace: "// ", "//" | replace: "//", "<br>" }}</span></td>
+        <td class="py--1 px--1"><span class="label label--small {{ ink }} block" data-clamp="{{ room_n }}">{{ room | replace: " //", "//" | replace: "// ", "//" | replace: "//", "<br>" }}</span></td>
         {%- endif -%}
       </tr>
     {%- endfor -%}
@@ -78,8 +88,8 @@
   {%- endif -%}
 
   {%- if acts != "" -%}
-    <span class="title title--small tt-act-sep tt-acts-head">After school</span>
-    <table class="table {{ tt_size }} tt-grid tt-acts" data-table-limit="true">
+    <span class="title title--small tt-act-sep block">After school</span>
+    <table class="table {{ tt_size }} tt-grid tt-acts w--full text--center" data-table-limit="true">
       <tbody>
         {%- assign ents = acts | split: "~" -%}
         {%- for e in ents -%}
@@ -88,9 +98,9 @@
           {%- assign e_name = ep[1] | default: "" | strip -%}
           {%- if e_name == "" -%}{%- assign e_name = e_time -%}{%- assign e_time = "" -%}{%- endif -%}
           <tr>
-            <td><span class="label label--small text--gray-30 tt-nw">{{ e_time }}</span></td>
+            <td class="py--1 px--1"><span class="label label--small text--gray-30 tt-nw block">{{ e_time }}</span></td>
             {%- assign e_n = e_name | split: "//" | size -%}
-            <td><span class="label {{ tt_subj_size }}" data-clamp="{{ e_n }}">{{ e_name | replace: " //", "//" | replace: "// ", "//" | replace: "//", "<br>" }}</span></td>
+            <td class="py--1 px--1"><span class="label {{ tt_subj_size }} block" data-clamp="{{ e_n }}">{{ e_name | replace: " //", "//" | replace: "// ", "//" | replace: "//", "<br>" }}</span></td>
           </tr>
         {%- endfor -%}
       </tbody>
