@@ -6,7 +6,7 @@ SRC = pathlib.Path(__file__).parent
 OUT = SRC.parent
 prep = (SRC / "_prep.liquid").read_text()
 today = (SRC / "_today.liquid").read_text()
-full = (SRC / "full.liquid").read_text()
+full = (SRC / "_full.liquid").read_text()
 
 views = {
     "full.liquid": prep + "\n" + full,
@@ -68,11 +68,9 @@ with zipfile.ZipFile(zpath, "w", zipfile.ZIP_DEFLATED) as z:
         z.writestr(n, t)
 print("->", zpath.name)
 
-# The TRMNL sync bot keeps the generated views in src/ too, so write them back
-# and keep the repo matching what TRMNL has. full.liquid is skipped on purpose:
-# in src/ that path is the hand-written source, not the prep-inlined build output.
+# GitHub Sync reads the views straight out of src/, so write the built ones back
+# there. The sources are the underscore-prefixed partials (_prep, _full, _today),
+# which TRMNL ignores; everything without an underscore is generated.
 for n, t in views.items():
-    if n == "full.liquid":
-        continue
     (SRC / n).write_text(t)
     print("   synced", n)

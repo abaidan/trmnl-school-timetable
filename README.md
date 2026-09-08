@@ -39,8 +39,30 @@ The time comes from the TRMNL account's timezone (`trmnl.user.utc_offset`) — m
 
 ## Sources
 
-`src/` — `settings.yml`, `_prep.liquid` (shared data preparation), `full.liquid`, `_today.liquid`, `build.py`.
-`python3 src/build.py` rebuilds the ZIP (the prep block is inlined into every view, because importing a ZIP does not guarantee shared markup support).
+Inside `src/`, the underscore-prefixed files are the hand-written sources and everything else is
+generated — TRMNL ignores the underscored ones:
+
+| File | |
+|---|---|
+| `_prep.liquid` | shared data preparation, inlined into every view |
+| `_full.liquid` | the week grid, both orientations |
+| `_today.liquid` | the single-day views |
+| `settings.yml` | the settings form (hand-written) |
+| `full.liquid`, `half_vertical.liquid`, `half_horizontal.liquid`, `quadrant.liquid` | generated — do not edit |
+
+`python3 src/build.py` rebuilds the ZIP and rewrites the four generated views in place. The prep
+block is inlined into each of them because neither a ZIP import nor GitHub Sync guarantees
+shared-markup support.
+
+## Getting changes into TRMNL
+
+This repo is connected to **GitHub Sync**, so pushing to `main` is enough: TRMNL picks up the push
+event and offers to import the changes (Plugins → Private Plugins → the plugin → GitHub Sync in the
+right-hand margin). The import is manual — you accept it. Saving in the TRMNL UI pushes the other
+way, as commits from `trmnl-sync[bot]`; those land on the generated files, which is why the sources
+are kept under separate names.
+
+Run `python3 src/build.py` and commit its output before pushing, or TRMNL will import stale views.
 
 ## If you ever want Bakaláři
 
