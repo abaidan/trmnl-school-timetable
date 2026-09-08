@@ -58,7 +58,7 @@ custom_fields:
   rows: 8
   group: Time
   description: One line = one lesson, in order. Format 8:00-8:45.
-  help_text: Up to 8 lessons. Needed to highlight the current lesson.
+  help_text: Only the first 8 lines are used. Needed to highlight the current lesson.
   default: |
     8:00-8:45
     8:55-9:40

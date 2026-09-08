@@ -48,7 +48,8 @@ def holes():
     return out
 
 
-def svg():
+def svg(px=S):
+    """`px` sets the intrinsic size; the viewBox is always the 512 grid."""
     n = lambda v: f"{v:g}"
     cells = "".join(
         f'<rect x="{n(x0)}" y="{n(y0)}" width="{n(x1 - x0)}" height="{n(y1 - y0)}"/>'
@@ -56,7 +57,7 @@ def svg():
     )
     return (
         f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {n(S)} {n(S)}" '
-        f'width="{n(S)}" height="{n(S)}">'
+        f'width="{n(px)}" height="{n(px)}">'
         f'<defs><clipPath id="i"><rect x="{n(IN0)}" y="{n(Y0 + BORDER)}" '
         f'width="{n(IN1 - IN0)}" height="{n(BODY_BOT - Y0 - BORDER)}" rx="{n(IN_R)}"/>'
         f'</clipPath>'
@@ -154,7 +155,9 @@ if __name__ == "__main__":
 
     # keep the title-bar copy in step with the file; inlined so the plugin
     # doesn't depend on fetching an image at render time
-    uri = "data:image/svg+xml;base64," + base64.b64encode(markup.encode()).decode()
+    # 24px intrinsic size: it lands in a title bar, not on a marketplace tile
+    icon24 = svg(24)
+    uri = "data:image/svg+xml;base64," + base64.b64encode(icon24.encode()).decode()
     prep = root / "src" / "_prep.liquid"
     text = prep.read_text()
     patched, n = re.subn(r'(\{%- assign tt_icon = ")[^"]*(" -%\})',
