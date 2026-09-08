@@ -182,14 +182,14 @@
 {%- if days_as_rows -%}
 
   {%- comment -%} --- time across the top, days down the side --- {%- endcomment -%}
-  <table class="table table--base lg:table--large tt-grid tt-week w--full text--center h--[{{ tt_fill }}cqh]" data-table-limit="true">
+  <table class="table table--base lg:table--large tt-grid tt-week w--full h--[{{ tt_fill }}cqh]" data-table-limit="true">
     <thead>
       <tr>
-        <th class="py--1 px--1"><span class="title title--small lg:title--base block">Day</span></th>
+        <th class="text--center py--1 px--1"><span class="title title--small lg:title--base block">Day</span></th>
         {%- for i in (0..last_i) -%}
           {%- assign lesson_no = forloop.index -%}
           {%- assign t = times_arr[i] | default: "" | strip | replace: "–", "-" | replace: "—", "-" | replace: " ", "" | replace: "-", "–" -%}
-          <th class="py--1 px--1">
+          <th class="text--center py--1 px--1">
             {%- if i == now_i -%}
               <span class="label label--inverted lg:label--large block">{{ lesson_no }}</span>
               <span class="label label--small tt-now-time tt-nw block">{{ t }}</span>
@@ -200,7 +200,7 @@
           </th>
         {%- endfor -%}
         {%- if has_acts -%}
-          <th class="tt-act-col py--1 px--1">
+          <th class="tt-act-col text--center py--1 px--1">
             <span class="title title--small lg:title--base block">After school</span>
             <span class="label label--small text--gray-30 block">&nbsp;</span>
           </th>
@@ -221,7 +221,7 @@
       {%- assign is_today = false -%}
       {%- if hl and is_weekend == false and d_no == dow -%}{%- assign is_today = true -%}{%- endif -%}
       <tr{% if is_today %} class="tt-today-row"{% endif %}>
-        <td class="py--1 px--1">
+        <td class="text--center py--1 px--1">
           {%- if is_today -%}
             <span class="label label--inverted lg:label--large block">{{ day_short[d_i] }}</span>
             <span class="label label--small text--gray-30 block">{{ today_str }}</span>
@@ -236,7 +236,7 @@
           {%- assign subj = raw | split: "|" | first | default: "" | strip -%}
           {%- assign room = "" -%}
           {%- if raw contains "|" -%}{%- assign room = raw | split: "|" | last | strip -%}{%- endif -%}
-          {%- assign cls = "py--1 px--1" -%}
+          {%- assign cls = "text--center py--1 px--1" -%}
           {%- assign ink = "text--gray-30" -%}
           {%- assign ink_main = "" -%}
           {%- assign ink_dim = "text--gray-55" -%}
@@ -261,7 +261,7 @@
           </td>
         {%- endfor -%}
         {%- if has_acts -%}
-          <td class="tt-act-col py--1 px--1">
+          <td class="tt-act-col text--center py--1 px--1">
             {%- assign ents = acts | split: "~" -%}
             {%- if ents.size == 0 -%}
               <span class="label label--small text--gray-55 block">—</span>
@@ -287,16 +287,16 @@
 {%- else -%}
 
   {%- comment -%} --- days across the top, time down the side (default) --- {%- endcomment -%}
-  <table class="table table--base lg:table--large tt-grid tt-week w--full text--center h--[{{ tt_fill }}cqh]" data-table-limit="true">
+  <table class="table table--base lg:table--large tt-grid tt-week w--full h--[{{ tt_fill }}cqh]" data-table-limit="true">
     <thead>
       <tr>
-        <th class="py--1 px--1"><span class="title title--small lg:title--base block">#</span></th>
-        <th class="py--1 px--1"><span class="title title--small lg:title--base block">Time</span></th>
+        <th class="text--center py--1 px--1"><span class="title title--small lg:title--base block">#</span></th>
+        <th class="text--center py--1 px--1"><span class="title title--small lg:title--base block">Time</span></th>
         {%- for dk in day_keys -%}
           {%- assign d_no = forloop.index -%}
           {%- assign is_today = false -%}
           {%- if hl and is_weekend == false and d_no == dow -%}{%- assign is_today = true -%}{%- endif -%}
-          <th class="py--1 px--1{% if is_today %} tt-today{% endif %}">
+          <th class="text--center py--1 px--1{% if is_today %} tt-today{% endif %}">
             {%- if is_today -%}
               <span class="label label--inverted lg:label--large block">{{ day_short[forloop.index0] }} · {{ today_str }}</span>
             {%- else -%}
@@ -312,11 +312,11 @@
       {%- assign t = times_arr[i] | default: "" | strip | replace: "–", "-" | replace: "—", "-" | replace: " ", "" | replace: "-", "–" -%}
       <tr>
         {%- if i == now_i -%}
-          <td class="py--1 px--1"><span class="label label--inverted lg:label--large block">{{ lesson_no }}</span></td>
-          <td class="py--1 px--1"><span class="label label--small lg:label--base tt-now-time tt-nw block">{{ t }}</span></td>
+          <td class="text--center py--1 px--1"><span class="label label--inverted lg:label--large block">{{ lesson_no }}</span></td>
+          <td class="text--center py--1 px--1"><span class="label label--small lg:label--base tt-now-time tt-nw block">{{ t }}</span></td>
         {%- else -%}
-          <td class="py--1 px--1"><span class="label label--small lg:label--base block">{{ lesson_no }}</span></td>
-          <td class="py--1 px--1"><span class="label label--small lg:label--base tt-nw block">{{ t }}</span></td>
+          <td class="text--center py--1 px--1"><span class="label label--small lg:label--base block">{{ lesson_no }}</span></td>
+          <td class="text--center py--1 px--1"><span class="label label--small lg:label--base tt-nw block">{{ t }}</span></td>
         {%- endif -%}
         {%- for dk in day_keys -%}
           {%- assign d_no = forloop.index -%}
@@ -332,7 +332,7 @@
           {%- assign subj = raw | split: "|" | first | default: "" | strip -%}
           {%- assign room = "" -%}
           {%- if raw contains "|" -%}{%- assign room = raw | split: "|" | last | strip -%}{%- endif -%}
-          {%- assign cls = "py--1 px--1" -%}
+          {%- assign cls = "text--center py--1 px--1" -%}
           {%- assign ink = "text--gray-30" -%}
           {%- assign ink_main = "" -%}
           {%- assign ink_dim = "text--gray-55" -%}
@@ -367,7 +367,7 @@
           {%- assign b_name = bs | split: ":" | last | strip -%}
           {%- if b_no == lesson_no and i < last_i -%}
             <tr class="tt-break">
-              <td colspan="7" class="py--0 px--1"><span class="label label--small lg:label--base text--gray-25 block">{{ b_name | replace: " //", "//" | replace: "// ", "//" | replace: "//", "<br>" }}</span></td>
+              <td colspan="7" class="text--center py--0 px--1"><span class="label label--small lg:label--base text--gray-25 block">{{ b_name | replace: " //", "//" | replace: "// ", "//" | replace: "//", "<br>" }}</span></td>
             </tr>
           {%- endif -%}
         {%- endif -%}
@@ -375,7 +375,7 @@
     {%- endfor -%}
     {%- if has_acts -%}
       <tr class="tt-act-row">
-        <td colspan="2" class="py--1 px--1"><span class="label label--small lg:label--base block">After school</span></td>
+        <td colspan="2" class="text--center py--1 px--1"><span class="label label--small lg:label--base block">After school</span></td>
         {%- for dk in day_keys -%}
           {%- assign d_no = forloop.index -%}
           {%- case dk -%}
@@ -385,7 +385,7 @@
             {%- when "thu" -%}{%- assign acts = thu_acts -%}
             {%- else -%}{%- assign acts = fri_acts -%}
           {%- endcase -%}
-          {%- assign cls = "py--1 px--1" -%}
+          {%- assign cls = "text--center py--1 px--1" -%}
           {%- if hl and is_weekend == false and d_no == dow -%}{%- assign cls = cls | append: " tt-today" -%}{%- endif -%}
           <td class="{{ cls }}">
             {%- assign ents = acts | split: "~" -%}

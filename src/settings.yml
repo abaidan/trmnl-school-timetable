@@ -35,6 +35,9 @@ custom_fields:
   name: About this plugin
   field_type: author_bio
   category: education,personal
+  github_url: https://github.com/abaidan/trmnl-school-timetable
+  email_address: howtwizer@gmail.com
+  learn_more_url: https://baidan.website
   description: A weekly school timetable. Everything is typed in by hand — no API, no accounts. One line = one lesson. The full screen shows the whole week with today and the current lesson highlighted; the half and quadrant views show today (Monday on weekends). Optimized for TRMNL X and TRMNL OG.
 - keyname: class_name
   name: Class

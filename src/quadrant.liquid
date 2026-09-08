@@ -195,7 +195,7 @@
       <span class="label label--large">No lessons</span>
     </div>
   {%- else -%}
-  <table class="table {{ tt_size }} tt-grid tt-list w--full text--center" data-table-limit="true">
+  <table class="table {{ tt_size }} tt-grid tt-list w--full" data-table-limit="true">
     <tbody>
     {%- for i in (0..last_i) -%}
       {%- assign lesson_no = i | plus: 1 -%}
@@ -217,9 +217,9 @@
         {%- assign ink_dim = "text--white" -%}
       {%- endif -%}
       <tr{% if rcls != "" %} class="{{ rcls }}"{% endif %}>
-        <td class="py--1 px--1"><span class="label label--small block {{ ink_main }}">{{ lesson_no }}</span></td>
-        <td class="py--1 px--1"><span class="label label--small tt-nw block {{ ink_main }}">{{ t }}</span></td>
-        <td class="py--1 px--1">
+        <td class="text--center py--1 px--1"><span class="label label--small block {{ ink_main }}">{{ lesson_no }}</span></td>
+        <td class="text--center py--1 px--1"><span class="label label--small tt-nw block {{ ink_main }}">{{ t }}</span></td>
+        <td class="text--center py--1 px--1">
           {%- if subj == "" -%}
             <span class="label label--small {{ ink_dim }} block">—</span>
           {%- else -%}
@@ -230,7 +230,7 @@
         {%- if tt_show_room -%}
         {%- assign room_n = room | split: "//" | size -%}
         {%- if room_n < 1 -%}{%- assign room_n = 1 -%}{%- endif -%}
-        <td class="py--1 px--1"><span class="label label--small {{ ink }} block" data-clamp="{{ room_n }}">{{ room | replace: " //", "//" | replace: "// ", "//" | replace: "//", "<br>" }}</span></td>
+        <td class="text--center py--1 px--1"><span class="label label--small {{ ink }} block" data-clamp="{{ room_n }}">{{ room | replace: " //", "//" | replace: "// ", "//" | replace: "//", "<br>" }}</span></td>
         {%- endif -%}
       </tr>
     {%- endfor -%}
@@ -240,7 +240,7 @@
 
   {%- if acts != "" -%}
     <span class="title title--small tt-act-sep block">After school</span>
-    <table class="table {{ tt_size }} tt-grid tt-acts w--full text--center" data-table-limit="true">
+    <table class="table {{ tt_size }} tt-grid tt-acts w--full" data-table-limit="true">
       <tbody>
         {%- assign ents = acts | split: "~" -%}
         {%- for e in ents -%}
@@ -249,9 +249,9 @@
           {%- assign e_name = ep[1] | default: "" | strip -%}
           {%- if e_name == "" -%}{%- assign e_name = e_time -%}{%- assign e_time = "" -%}{%- endif -%}
           <tr>
-            <td class="py--1 px--1"><span class="label label--small text--gray-30 tt-nw block">{{ e_time }}</span></td>
+            <td class="text--center py--1 px--1"><span class="label label--small text--gray-30 tt-nw block">{{ e_time }}</span></td>
             {%- assign e_n = e_name | split: "//" | size -%}
-            <td class="py--1 px--1"><span class="label {{ tt_subj_size }} block" data-clamp="{{ e_n }}">{{ e_name | replace: " //", "//" | replace: "// ", "//" | replace: "//", "<br>" }}</span></td>
+            <td class="text--center py--1 px--1"><span class="label {{ tt_subj_size }} block" data-clamp="{{ e_n }}">{{ e_name | replace: " //", "//" | replace: "// ", "//" | replace: "//", "<br>" }}</span></td>
           </tr>
         {%- endfor -%}
       </tbody>
