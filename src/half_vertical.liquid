@@ -107,16 +107,6 @@
 {%- if n_rows > 8 -%}{%- assign n_rows = 8 -%}{%- endif -%}
 {%- assign last_i = n_rows | minus: 1 -%}
 
-{%- comment -%} how many break rows actually render (they sit between lessons) {%- endcomment -%}
-{%- assign n_breaks = 0 -%}
-{%- for b in breaks_arr -%}
-  {%- assign bs = b | strip -%}
-  {%- if bs contains ":" -%}
-    {%- assign b_no = bs | split: ":" | first | strip | plus: 0 -%}
-    {%- if b_no >= 1 and b_no < n_rows -%}{%- assign n_breaks = n_breaks | plus: 1 -%}{%- endif -%}
-  {%- endif -%}
-{%- endfor -%}
-
 {%- comment -%} index of the lesson happening right now (0-based), or -1 {%- endcomment -%}
 {%- assign now_i = -1 -%}
 {%- if hl and is_weekend == false -%}

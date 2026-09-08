@@ -107,16 +107,6 @@
 {%- if n_rows > 8 -%}{%- assign n_rows = 8 -%}{%- endif -%}
 {%- assign last_i = n_rows | minus: 1 -%}
 
-{%- comment -%} how many break rows actually render (they sit between lessons) {%- endcomment -%}
-{%- assign n_breaks = 0 -%}
-{%- for b in breaks_arr -%}
-  {%- assign bs = b | strip -%}
-  {%- if bs contains ":" -%}
-    {%- assign b_no = bs | split: ":" | first | strip | plus: 0 -%}
-    {%- if b_no >= 1 and b_no < n_rows -%}{%- assign n_breaks = n_breaks | plus: 1 -%}{%- endif -%}
-  {%- endif -%}
-{%- endfor -%}
-
 {%- comment -%} index of the lesson happening right now (0-based), or -1 {%- endcomment -%}
 {%- assign now_i = -1 -%}
 {%- if hl and is_weekend == false -%}
@@ -165,28 +155,17 @@
 {%- comment -%} ===== FULL: the whole week ===== {%- endcomment -%}
 
 {%- comment -%}
-  Row heights are computed rather than left to the content, otherwise the grid
-  sits in a thin band with dead space above and below it. Break rows stay
-  compact and get a smaller share; everything else splits what is left.
-  vh is safe here because the full view always owns the whole screen.
+  Fill the screen. The framework already gives .layout a definite height of
+  screen - gaps - title bar and centres its children, which is what left the
+  grid sitting in a band with dead space above and below. layout--stretch-x
+  makes the table a flex:1 child of that, so height:100% resolves against the
+  available area exactly and the table distributes it across its rows.
+
+  Do not reach for vh here: that measures the whole viewport, title bar and
+  gaps included, so it overshoots and data-table-limit starts dropping rows.
 {%- endcomment -%}
-{%- assign tt_avail = 84.0 -%}
-{%- assign tt_break_h = 3.5 -%}
-{%- if days_as_rows -%}
-  {%- assign tt_tall = 6 -%}
-  {%- assign tt_breaks = 0 -%}
-{%- else -%}
-  {%- assign tt_tall = n_rows | plus: 1 -%}
-  {%- if has_acts -%}{%- assign tt_tall = tt_tall | plus: 1 -%}{%- endif -%}
-  {%- assign tt_breaks = n_breaks -%}
-{%- endif -%}
-{%- assign tt_used = tt_breaks | times: tt_break_h -%}
-{%- comment -%} capped so a nearly empty timetable doesn't get absurd rows {%- endcomment -%}
-{%- assign tt_row_h = tt_avail | minus: tt_used | divided_by: tt_tall | at_most: 20 | round: 2 -%}
 <style>
   .tt-week { height: 100%; }
-  .tt-week tr { height: {{ tt_row_h }}vh; }
-  .tt-week tr.tt-break { height: {{ tt_break_h }}vh; }
 </style>
 
 <div class="layout layout--col layout--stretch-x gap--small">

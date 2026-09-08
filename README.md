@@ -30,9 +30,12 @@ Manual input, no API. Optimized for TRMNL X (1872×1404, 4-bit), also works on T
 On weekends, Monday is shown instead of "today", marked as "day off".
 
 All grid cells are equal width (fixed table layout) and their contents are centred. On the full
-screen the row height is computed from how many rows there are, so the grid fills the display
-instead of sitting in a band with dead space around it; break rows stay compact, and the height is
-capped so a nearly empty timetable doesn't get absurd rows.
+screen the grid is stretched to `height: 100%` so it fills the display instead of sitting in a band
+with dead space around it, and the rows share that height out between them.
+
+Don't reach for `vh` to do this. The framework already sizes `.layout` to
+`screen − gaps − title bar`, so `100%` is exactly the available area, whereas `vh` measures the
+whole viewport — it overshoots, and `data-table-limit` starts silently dropping rows.
 
 **Line breaks.** `//` anywhere in a subject, room, break name or activity name splits it across
 lines, and the cell's clamp grows to match so nothing is truncated:
