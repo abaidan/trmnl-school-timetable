@@ -69,6 +69,23 @@ generated — TRMNL ignores the underscored ones:
 block is inlined into each of them because neither a ZIP import nor GitHub Sync guarantees
 shared-markup support.
 
+## Icon
+
+`assets/` holds the plugin icon — a timetable grid with one column left solid, the same "today is
+highlighted" idea the plugin renders on screen. Black on transparency, no hairlines, so it holds up
+both as a marketplace tile and shrunk into the title bar.
+
+| File | Use |
+|---|---|
+| `icon.svg` | master, 512×512 |
+| `icon-512.png` | marketplace listing |
+| `icon-128.png`, `icon-48.png` | smaller renders for previewing |
+
+`python3 tools/make_icon.py` regenerates all of them from one set of geometry constants and also
+refreshes the inlined copy in `_prep.liquid` that the title bar uses — the plugin embeds it as a
+data URI rather than fetching an image at render time. Edit the constants at the top of the script,
+not the generated files. Run `python3 src/build.py` afterwards to get it into the views.
+
 ## Getting changes into TRMNL
 
 This repo is connected to **GitHub Sync**, so pushing to `main` is enough: TRMNL picks up the push
