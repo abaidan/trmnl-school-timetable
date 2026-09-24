@@ -13,15 +13,18 @@ views = {
     "half_vertical.liquid": prep
         + '\n{%- assign tt_size = "table--small lg:table--base" -%}'
         + '\n{%- assign tt_subj_size = "lg:label--large" -%}'
+        + '\n{%- assign tt_show_room_inline = false -%}'
         + '\n{%- assign tt_show_room = show_room -%}\n' + today,
     "half_horizontal.liquid": prep
         + '\n{%- assign tt_size = "table--xsmall lg:table--small" -%}'
-        + '\n{%- assign tt_subj_size = "" -%}'
+        + '\n{%- assign tt_subj_size = "lg:label--large" -%}'
+        + '\n{%- assign tt_show_room_inline = false -%}'
         + '\n{%- assign tt_show_room = show_room -%}'
         + '\n{%- assign tt_skip_empty = true -%}\n' + today,
     "quadrant.liquid": prep
         + '\n{%- assign tt_size = "table--xsmall lg:table--small" -%}'
-        + '\n{%- assign tt_subj_size = "" -%}'
+        + '\n{%- assign tt_subj_size = "lg:label--large" -%}'
+        + '\n{%- assign tt_show_room_inline = show_room -%}'
         + '\n{%- assign tt_show_room = false -%}'
         + '\n{%- assign tt_skip_empty = true -%}\n' + today,
 }
