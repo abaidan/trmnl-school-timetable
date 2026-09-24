@@ -74,7 +74,7 @@
           {%- else -%}
             {%- assign subj_n = subj | split: "//" | size -%}
             <span class="label {{ tt_subj_size }} block {{ ink_main }}" data-clamp="{{ subj_n }}">{{ subj | replace: " //", "//" | replace: "// ", "//" | replace: "//", "<br>" }}</span>
-            {%- if tt_show_room_inline and room != "" -%}
+            {%- if tt_show_room_inline and tt_show_room == false and room != "" -%}
               {%- assign room_n = room | split: "//" | size -%}
               {%- if room_n < 1 -%}{%- assign room_n = 1 -%}{%- endif -%}
               <span class="label label--small {{ ink }} hidden lg:block" data-clamp="{{ room_n }}">{{ room | replace: " //", "//" | replace: "// ", "//" | replace: "//", "<br>" }}</span>
