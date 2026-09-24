@@ -26,7 +26,7 @@ Manual input, no API. Optimized for TRMNL X (1872×1404, 4-bit), also works on T
 | Full | Mon–Fri week grid in the chosen orientation. Today is highlighted, the current lesson is inverted. After-school activities get their own row (or column) below/next to the lessons. On OG the rooms are hidden in the grid (not enough space), on X they are shown. |
 | Half vertical | Today: #, time, subject, room, then an **After school** block if that day has any activities. Current lesson inverted. Free periods are shown as a dash, so the lesson numbers stay continuous. |
 | Half horizontal | The same, but tighter: free periods are **dropped** rather than shown, so the numbers can jump (1, 2, 4 …). On X the subject/activity text scales up. |
-| Quadrant | Today, compact, free periods dropped as above, plus the activities block. On X the subject/activity text scales up and the room/teacher line appears under the subject when available. |
+| Quadrant | Today, compact, free periods dropped as above, plus the activities block. On X the subject/activity text scales up and, when **Show room** is enabled, the room/teacher line appears under the subject when available. |
 
 On weekends, Monday is shown instead of "today", marked as "day off".
 
