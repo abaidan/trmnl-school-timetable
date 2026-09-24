@@ -206,6 +206,9 @@
       {%- assign subj = raw | split: "|" | first | default: "" | strip -%}
       {%- assign room = "" -%}
       {%- if raw contains "|" -%}{%- assign room = raw | split: "|" | last | strip -%}{%- endif -%}
+      {%- assign room_n = room | split: "//" | size -%}
+      {%- if room_n < 1 -%}{%- assign room_n = 1 -%}{%- endif -%}
+      {%- assign room_text = room | replace: " //", "//" | replace: "// ", "//" | replace: "//", "<br>" -%}
       {%- assign t = times_arr[i] | default: "" | strip | replace: "–", "-" | replace: "—", "-" | replace: " ", "" | replace: "-", "–" -%}
       {%- if tt_skip_empty and subj == "" -%}{%- continue -%}{%- endif -%}
       {%- assign ink = "text--gray-30" -%}
@@ -228,16 +231,12 @@
             {%- assign subj_n = subj | split: "//" | size -%}
             <span class="label {{ tt_subj_size }} block {{ ink_main }}" data-clamp="{{ subj_n }}">{{ subj | replace: " //", "//" | replace: "// ", "//" | replace: "//", "<br>" }}</span>
             {%- if tt_show_room_inline and tt_show_room == false and room != "" -%}
-              {%- assign room_n = room | split: "//" | size -%}
-              {%- if room_n < 1 -%}{%- assign room_n = 1 -%}{%- endif -%}
-              <span class="label label--small {{ ink }} hidden lg:block" data-clamp="{{ room_n }}">{{ room | replace: " //", "//" | replace: "// ", "//" | replace: "//", "<br>" }}</span>
+              <span class="label label--small {{ ink }} hidden lg:block" data-clamp="{{ room_n }}">{{ room_text }}</span>
             {%- endif -%}
           {%- endif -%}
         </td>
         {%- if tt_show_room -%}
-        {%- assign room_n = room | split: "//" | size -%}
-        {%- if room_n < 1 -%}{%- assign room_n = 1 -%}{%- endif -%}
-        <td class="text--center py--1 px--1"><span class="label label--small {{ ink }} block" data-clamp="{{ room_n }}">{{ room | replace: " //", "//" | replace: "// ", "//" | replace: "//", "<br>" }}</span></td>
+        <td class="text--center py--1 px--1"><span class="label label--small {{ ink }} block" data-clamp="{{ room_n }}">{{ room_text }}</span></td>
         {%- endif -%}
       </tr>
     {%- endfor -%}
