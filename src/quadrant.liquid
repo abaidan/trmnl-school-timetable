@@ -222,8 +222,8 @@
         {%- assign ink_dim = "text--white" -%}
       {%- endif -%}
       <tr{% if rcls != "" %} class="{{ rcls }}"{% endif %}>
-        <td class="text--center py--1 px--1"><span class="label label--small block {{ ink_main }}">{{ lesson_no }}</span></td>
-        <td class="text--center py--1 px--1"><span class="label label--small tt-nw block {{ ink_main }}">{{ t }}</span></td>
+        <td class="text--center py--1 px--1"><span class="label label--small lg:label--large block {{ ink_main }}">{{ lesson_no }}</span></td>
+        <td class="text--center py--1 px--1"><span class="label label--small lg:label--large tt-nw block {{ ink_main }}">{{ t }}</span></td>
         <td class="text--center py--1 px--1">
           {%- if subj == "" -%}
             <span class="label label--small {{ ink_dim }} block">—</span>
@@ -236,7 +236,7 @@
           {%- endif -%}
         </td>
         {%- if tt_show_room -%}
-        <td class="text--center py--1 px--1"><span class="label label--small {{ ink }} block" data-clamp="{{ room_n }}">{{ room_text }}</span></td>
+        <td class="text--center py--1 px--1"><span class="label label--small lg:label--large {{ ink }} block" data-clamp="{{ room_n }}">{{ room_text }}</span></td>
         {%- endif -%}
       </tr>
     {%- endfor -%}
@@ -255,7 +255,7 @@
           {%- assign e_name = ep[1] | default: "" | strip -%}
           {%- if e_name == "" -%}{%- assign e_name = e_time -%}{%- assign e_time = "" -%}{%- endif -%}
           <tr>
-            <td class="text--center py--1 px--1"><span class="label label--small text--gray-30 tt-nw block">{{ e_time }}</span></td>
+            <td class="text--center py--1 px--1"><span class="label label--small lg:label--large text--gray-30 tt-nw block">{{ e_time }}</span></td>
             {%- assign e_n = e_name | split: "//" | size -%}
             <td class="text--center py--1 px--1"><span class="label {{ tt_subj_size }} block" data-clamp="{{ e_n }}">{{ e_name | replace: " //", "//" | replace: "// ", "//" | replace: "//", "<br>" }}</span></td>
           </tr>
