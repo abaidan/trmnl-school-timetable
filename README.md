@@ -25,10 +25,14 @@ Manual input, no API. Optimized for TRMNL X (1872×1404, 4-bit), also works on T
 |---|---|
 | Full | Mon–Fri week grid in the chosen orientation. Today is highlighted, the current lesson is inverted. After-school activities get their own row (or column) below/next to the lessons. On OG the rooms are hidden in the grid (not enough space), on X they are shown. |
 | Half vertical | Today: #, time, subject, room, then an **After school** block if that day has any activities. Current lesson inverted. Free periods are shown as a dash, so the lesson numbers stay continuous. |
-| Half horizontal | The same, but tighter: free periods are **dropped** rather than shown, so the numbers can jump (1, 2, 4 …). On X the subject/activity text scales up. |
+| Half horizontal | The same, but tighter: free periods are **dropped** rather than shown, so the numbers can jump (1, 2, 4 …). When the day has activities, the **After school** block sits to the right of the lessons instead of below them. On X the subject/activity text scales up. |
 | Quadrant | Today, compact, free periods dropped as above, plus the activities block. On X the subject/activity text scales up and, when **Show room** is enabled, the room/teacher line appears under the subject when available. |
 
 On weekends, Monday is shown instead of "today", marked as "day off".
+
+When a day has more lessons than fit (typically the quadrant on OG), the last ones collapse into an
+"and N more" row; the **After school** block always stays visible. Small gray text (times, rooms,
+dashes) is forced to black on 1-bit screens (`1bit:text--black`), where gray is hard to read.
 
 All grid cells are equal width (fixed table layout) and their contents are centred. On the full
 screen the grid is stretched to `height: 100%` so it fills the display instead of sitting in a band
@@ -37,6 +41,10 @@ with dead space around it, and the rows share that height out between them.
 Don't reach for `vh` to do this. The framework already sizes `.layout` to
 `screen − gaps − title bar`, so `100%` is exactly the available area, whereas `vh` measures the
 whole viewport — it overshoots, and `data-table-limit` starts silently dropping rows.
+
+Stretching only sets a minimum: what decides whether the grid fits is the table size, since each
+size gives body rows a minimum height (`table--base` 46px, `table--small` 31px on OG). The
+days-as-columns grid uses `table--small` on OG so eight lessons, breaks and the activities row fit.
 
 **Line breaks.** `//` anywhere in a subject, room, break name or activity name splits it across
 lines, and the cell's clamp grows to match so nothing is truncated:
@@ -75,6 +83,10 @@ generated — TRMNL ignores the underscored ones:
 `python3 src/build.py` rebuilds the ZIP and rewrites the four generated views in place. The prep
 block is inlined into each of them because neither a ZIP import nor GitHub Sync guarantees
 shared-markup support.
+
+Edits saved in the TRMNL editor come back through GitHub Sync into the **generated** files only, and
+the next build overwrites them — port them into the underscored sources first. Those sync commits
+can also switch a file to CRLF, so compare with `git diff -w`.
 
 ## Icon
 
