@@ -185,18 +185,35 @@
   .tt-list tr:first-child td:nth-child(3) { width: {{ w_subj }}; }
   .tt-list tr:first-child td:nth-child(4) { width: 26%; }
   .tt-acts tr:first-child td:nth-child(1) { width: 38%; }
+  .tt-fill { overflow: hidden; }
 </style>
 
-<div class="layout layout--col layout--stretch-x gap--small">
-  <div class="flex flex--row flex--between flex--center-y">
+{%- comment -%}
+  The lessons table sits in a .stretch wrapper so data-table-limit, which
+  measures the table's parent, sees only the height left after the heading
+  and the After school block. Measured against the whole .layout it never
+  cut a row, and the activities were pushed off the bottom instead.
+  No layout--stretch-x here: its "> * { flex: initial }" defeats .stretch,
+  hence the explicit w--full on the direct children.
+
+  tt_side puts the lessons and After school next to each other (half
+  horizontal: wide and short, so stacking wastes the one spare dimension).
+{%- endcomment -%}
+{%- assign tt_side = false -%}
+{%- if tt_two_col and has_any and acts != "" -%}{%- assign tt_side = true -%}{%- endif -%}
+
+<div class="layout layout--col gap--small">
+  <div class="flex flex--row flex--between flex--center-y w--full">
     <span class="title title--small lg:title--base">{{ heading }}</span>
     {%- if is_weekend -%}<span class="label label--small lg:label--large label--outline">day off</span>{%- endif -%}
   </div>
   {%- if has_any == false -%}
-    <div class="flex flex--center stretch">
+    <div class="flex flex--center stretch w--full">
       <span class="label label--large">No lessons</span>
     </div>
   {%- else -%}
+  {%- if tt_side -%}<div class="flex flex--row gap--small stretch w--full">{%- endif -%}
+  <div class="stretch w--full tt-fill">
   <table class="table {{ tt_size }} tt-grid tt-list w--full" data-table-limit="true">
     <tbody>
     {%- for i in (0..last_i) -%}
@@ -242,10 +259,12 @@
     {%- endfor -%}
     </tbody>
   </table>
+  </div>
   {%- endif -%}
 
   {%- if acts != "" -%}
-    <span class="title title--small tt-act-sep block">After school</span>
+    {%- if tt_side -%}<div class="stretch w--full tt-fill">{%- endif -%}
+    <span class="title title--small tt-act-sep block w--full">After school</span>
     <table class="table {{ tt_size }} tt-grid tt-acts w--full" data-table-limit="true">
       <tbody>
         {%- assign ents = acts | split: "~" -%}
@@ -262,6 +281,7 @@
         {%- endfor -%}
       </tbody>
     </table>
+    {%- if tt_side -%}</div></div>{%- endif -%}
   {%- endif -%}
 </div>
 
