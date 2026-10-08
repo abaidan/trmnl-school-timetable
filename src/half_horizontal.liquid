@@ -190,7 +190,7 @@
 <div class="layout layout--col layout--stretch-x gap--small">
   <div class="flex flex--row flex--between flex--center-y">
     <span class="title title--small lg:title--base">{{ heading }}</span>
-    {%- if is_weekend -%}<span class="label label--small label--outline">day off</span>{%- endif -%}
+    {%- if is_weekend -%}<span class="label label--small lg:label--large label--outline">day off</span>{%- endif -%}
   </div>
   {%- if has_any == false -%}
     <div class="flex flex--center stretch">
@@ -236,7 +236,7 @@
           {%- endif -%}
         </td>
         {%- if tt_show_room -%}
-        <td class="text--center py--1 px--1"><span class="label label--small {{ ink }} block" data-clamp="{{ room_n }}">{{ room_text }}</span></td>
+        <td class="text--center py--1 px--1"><span class="label label--small lg:label--large {{ ink }} block" data-clamp="{{ room_n }}">{{ room_text }}</span></td>
         {%- endif -%}
       </tr>
     {%- endfor -%}
