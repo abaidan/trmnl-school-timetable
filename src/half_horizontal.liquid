@@ -211,9 +211,9 @@
       {%- assign room_text = room | replace: " //", "//" | replace: "// ", "//" | replace: "//", "<br>" -%}
       {%- assign t = times_arr[i] | default: "" | strip | replace: "–", "-" | replace: "—", "-" | replace: " ", "" | replace: "-", "–" -%}
       {%- if tt_skip_empty and subj == "" -%}{%- continue -%}{%- endif -%}
-      {%- assign ink = "text--gray-30" -%}
+      {%- assign ink = "text--gray-30 1bit:text--black" -%}
       {%- assign ink_main = "" -%}
-      {%- assign ink_dim = "text--gray-55" -%}
+      {%- assign ink_dim = "text--gray-55 1bit:text--black" -%}
       {%- assign rcls = "" -%}
       {%- if i == now_i and is_weekend == false -%}
         {%- assign rcls = "bg--black" -%}
@@ -255,7 +255,7 @@
           {%- assign e_name = ep[1] | default: "" | strip -%}
           {%- if e_name == "" -%}{%- assign e_name = e_time -%}{%- assign e_time = "" -%}{%- endif -%}
           <tr>
-            <td class="text--center py--1 px--1"><span class="label label--small lg:label--large text--gray-30 tt-nw block">{{ e_time }}</span></td>
+            <td class="text--center py--1 px--1"><span class="label label--small lg:label--large text--gray-30 1bit:text--black tt-nw block">{{ e_time }}</span></td>
             {%- assign e_n = e_name | split: "//" | size -%}
             <td class="text--center py--1 px--1"><span class="label {{ tt_subj_size }} block" data-clamp="{{ e_n }}">{{ e_name | replace: " //", "//" | replace: "// ", "//" | replace: "//", "<br>" }}</span></td>
           </tr>

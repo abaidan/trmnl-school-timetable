@@ -54,14 +54,14 @@
               <span class="label label--small text--bold tt-nw block">{{ t }}</span>
             {%- else -%}
               <span class="title title--small lg:title--base block">{{ lesson_no }}</span>
-              <span class="label label--small text--gray-30 tt-nw block">{{ t }}</span>
+              <span class="label label--small text--gray-30 1bit:text--black tt-nw block">{{ t }}</span>
             {%- endif -%}
           </th>
         {%- endfor -%}
         {%- if has_acts -%}
           <th class="border--v-black text--center py--1 px--1">
             <span class="title title--small lg:title--base block">After school</span>
-            <span class="label label--small text--gray-30 block">&nbsp;</span>
+            <span class="label label--small text--gray-30 1bit:text--black block">&nbsp;</span>
           </th>
         {%- endif -%}
       </tr>
@@ -85,10 +85,10 @@
         <td class="text--center py--1 px--1">
           {%- if is_today -%}
             <span class="label label--inverted lg:label--large block{{ bold }}">{{ day_short[d_i] }}</span>
-            <span class="label label--small text--gray-30 block{{ bold }}">{{ today_str }}</span>
+            <span class="label label--small text--gray-30 1bit:text--black block{{ bold }}">{{ today_str }}</span>
           {%- else -%}
             <span class="title title--small lg:title--base block">{{ day_short[d_i] }}</span>
-            <span class="label label--small text--gray-30 block">&nbsp;</span>
+            <span class="label label--small text--gray-30 1bit:text--black block">&nbsp;</span>
           {%- endif -%}
         </td>
         {%- for i in (0..last_i) -%}
@@ -98,9 +98,9 @@
           {%- assign room = "" -%}
           {%- if raw contains "|" -%}{%- assign room = raw | split: "|" | last | strip -%}{%- endif -%}
           {%- assign cls = "text--center py--1 px--1" -%}
-          {%- assign ink = "text--gray-30" | append: bold -%}
+          {%- assign ink = "text--gray-30 1bit:text--black" | append: bold -%}
           {%- assign ink_main = bold -%}
-          {%- assign ink_dim = "text--gray-55" | append: bold -%}
+          {%- assign ink_dim = "text--gray-55 1bit:text--black" | append: bold -%}
           {%- if is_today and i == now_i -%}
             {%- assign cls = cls | append: " bg--black" -%}
             {%- assign ink = "text--white" -%}
@@ -125,7 +125,7 @@
           <td class="border--v-black text--center py--1 px--1">
             {%- assign ents = acts | split: "~" -%}
             {%- if ents.size == 0 -%}
-              <span class="label label--small text--gray-55 block">—</span>
+              <span class="label label--small text--gray-55 1bit:text--black block">—</span>
             {%- endif -%}
             {%- for e in ents -%}
               {%- assign ep = e | split: "|" -%}
@@ -135,7 +135,7 @@
               {%- assign e_n = e_name | split: "//" | size -%}
               <span class="label label--small lg:label--base block{{ bold }}" data-clamp="{{ e_n }}">{{ e_name | replace: " //", "//" | replace: "// ", "//" | replace: "//", "<br>" }}</span>
               {%- if e_time != "" -%}
-                <span class="label label--small text--gray-30 tt-nw block{{ bold }}">{{ e_time }}</span>
+                <span class="label label--small text--gray-30 1bit:text--black tt-nw block{{ bold }}">{{ e_time }}</span>
               {%- endif -%}
             {%- endfor -%}
           </td>
@@ -196,9 +196,9 @@
           {%- assign room = "" -%}
           {%- if raw contains "|" -%}{%- assign room = raw | split: "|" | last | strip -%}{%- endif -%}
           {%- assign cls = "text--center py--1 px--1" -%}
-          {%- assign ink = "text--gray-30" -%}
+          {%- assign ink = "text--gray-30 1bit:text--black" -%}
           {%- assign ink_main = "" -%}
-          {%- assign ink_dim = "text--gray-55" -%}
+          {%- assign ink_dim = "text--gray-55 1bit:text--black" -%}
           {%- if hl and is_weekend == false and d_no == dow -%}
             {%- assign cls = cls | append: " tt-today" -%}
             {%- assign ink = ink | append: " text--bold" -%}
@@ -233,7 +233,7 @@
           {%- assign b_name = bs | split: ":" | last | strip -%}
           {%- if b_no == lesson_no and i < last_i -%}
             <tr class="tt-break">
-              <td colspan="7" class="text--center py--0 px--1"><span class="label label--small lg:label--base text--gray-25 block">{{ b_name | replace: " //", "//" | replace: "// ", "//" | replace: "//", "<br>" }}</span></td>
+              <td colspan="7" class="text--center py--0 px--1"><span class="label label--small lg:label--base text--gray-25 1bit:text--black block">{{ b_name | replace: " //", "//" | replace: "// ", "//" | replace: "//", "<br>" }}</span></td>
             </tr>
           {%- endif -%}
         {%- endif -%}
@@ -260,7 +260,7 @@
           <td class="{{ cls }}">
             {%- assign ents = acts | split: "~" -%}
             {%- if ents.size == 0 -%}
-              <span class="label label--small text--gray-55 block">—</span>
+              <span class="label label--small text--gray-55 1bit:text--black block">—</span>
             {%- endif -%}
             {%- for e in ents -%}
               {%- assign ep = e | split: "|" -%}
@@ -270,7 +270,7 @@
               {%- assign e_n = e_name | split: "//" | size -%}
               <span class="label label--small lg:label--base block{{ bold }}" data-clamp="{{ e_n }}">{{ e_name | replace: " //", "//" | replace: "// ", "//" | replace: "//", "<br>" }}</span>
               {%- if e_time != "" -%}
-                <span class="label label--small text--gray-30 tt-nw block{{ bold }}">{{ e_time }}</span>
+                <span class="label label--small text--gray-30 1bit:text--black tt-nw block{{ bold }}">{{ e_time }}</span>
               {%- endif -%}
             {%- endfor -%}
           </td>
