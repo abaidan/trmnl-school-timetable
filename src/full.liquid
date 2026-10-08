@@ -295,8 +295,14 @@
 
 {%- else -%}
 
-  {%- comment -%} --- days across the top, time down the side (default) --- {%- endcomment -%}
-  <table class="table table--base lg:table--large tt-grid tt-week w--full h--[{{ tt_fill }}cqh]" data-table-limit="true">
+  {%- comment -%}
+    --- days across the top, time down the side (default) ---
+    table--small on OG: table--base gives every body row a 46px minimum, and 8
+    lessons plus a break or the activities row already exceed the 420px layout,
+    so data-table-limit cut the last rows. tt_fill cannot help, it is only a
+    minimum height. Days as rows has 6 rows and fits at table--base.
+  {%- endcomment -%}
+  <table class="table table--small lg:table--large tt-grid tt-week w--full h--[{{ tt_fill }}cqh]" data-table-limit="true">
     <thead>
       <tr>
         <th class="text--center py--1 px--1"><span class="title title--small lg:title--base block">#</span></th>
