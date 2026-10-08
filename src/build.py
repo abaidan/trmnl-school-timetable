@@ -20,7 +20,8 @@ views = {
         + '\n{%- assign tt_subj_size = "lg:label--large" -%}'
         + '\n{%- assign tt_show_room_inline = false -%}'
         + '\n{%- assign tt_show_room = show_room -%}'
-        + '\n{%- assign tt_skip_empty = true -%}\n' + today,
+        + '\n{%- assign tt_skip_empty = true -%}'
+        + '\n{%- assign tt_two_col = true -%}\n' + today,
     "quadrant.liquid": prep
         + '\n{%- assign tt_size = "table--xsmall lg:table--small" -%}'
         + '\n{%- assign tt_subj_size = "lg:label--large" -%}'
